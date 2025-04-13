@@ -40,6 +40,17 @@ jobs:
           fetch-depth: 1
           submodules: false
 
+      # Si un fichier .gitmodules existe, on le supprime pour éviter que le dossier "client" ne soit traité comme un sous-module
+      - name: Remove .gitmodules if exists
+        run: |
+          if [ -f .gitmodules ]; then
+            echo ".gitmodules found. Removing it..."
+            rm .gitmodules
+            git rm --cached .gitmodules || true
+          else
+            echo "No .gitmodules file found."
+          fi
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
