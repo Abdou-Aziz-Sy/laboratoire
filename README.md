@@ -44,7 +44,7 @@ echo "server.port=8080" > src/main/resources/application.properties
 1. **Le dossier `frontend` contient l'application React.**  
    La structure du dossier `client` est la suivante :
    ```
-   client/
+   frontend/
    ├── public
    │   ├── index.html
    │   └── ...
