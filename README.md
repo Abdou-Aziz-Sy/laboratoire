@@ -1,4 +1,3 @@
-**TaskManager** est une application de gestion de tâches composée d'un backend Spring Boot et d'un frontend React. Ce projet est en phase de développement et intègre des workflows CI/CD via GitHub Actions pour automatiser les builds et tests sur un environnement de staging.
 ## Prérequis
 
 Assurez-vous d'avoir installé sur votre machine :
@@ -42,7 +41,7 @@ echo "server.port=8080" > src/main/resources/application.properties
 
 ### Configuration du Frontend (React)
 
-1. **Le dossier `client` contient l'application React.**  
+1. **Le dossier `frontend` contient l'application React.**  
    La structure du dossier `client` est la suivante :
    ```
    client/
@@ -59,8 +58,8 @@ echo "server.port=8080" > src/main/resources/application.properties
    Placez-vous dans le dossier `client` et installez les dépendances :
 
 ```bash
-cd client
-npm ci
+cd frontend
+npm intall
 ```
 
 3. **Configurer le proxy**  
@@ -84,53 +83,8 @@ Votre backend s'exécutera par défaut sur [http://localhost:8080](http://localh
 Dans un terminal séparé, placez-vous dans le dossier `client` et démarrez l'application React :
 
 ```bash
-cd client
+cd frontend
 npm start
 ```
 
 L'application React sera accessible sur [http://localhost:3000](http://localhost:3000) et utilisera le proxy pour communiquer avec le backend.
-
-## Tests
-
-- **Backend :**  
-  Exécutez les tests unitaires et d'intégration avec Maven :
-
-  ```bash
-  mvn test
-  ```
-
-- **Frontend :**  
-  Dans le dossier `client`, lancez les tests :
-
-  ```bash
-  cd client
-  npm test -- --watchAll=false
-  ```
-
-## Workflow CI/CD
-
-Le projet inclut un workflow GitHub Actions pour automatiser les builds et tests en environnement de staging. Le fichier de configuration se trouve à l'emplacement `.github/workflows/ci.yml`.
-
-Chaque push sur les branches `main` ou `staging` déclenche les étapes suivantes :
-- **Backend :**  
-  Installation de JDK 17, compilation avec Maven et exécution des tests.
-- **Frontend :**  
-  Installation de Node.js, installation des dépendances, build de l'application React et exécution des tests.
-
-Vous pouvez consulter l'onglet **Actions** de notre dépôt GitHub pour suivre l'exécution des workflows.
-
-## Contribuer
-
-Nous encourageons les contributions ! Pour contribuer, suivez ces étapes :
-
-1. **Fork** le dépôt et clonez votre fork.
-2. Créez une branche pour votre fonctionnalité ou correction :
-   ```bash
-   git checkout -b feature/ma-nouvelle-fonctionnalité
-   ```
-3. Effectuez vos modifications et **commit**z-les avec des messages clairs.
-4. **Poussez** votre branche sur votre fork :
-   ```bash
-   git push origin feature/ma-nouvelle-fonctionnalité
-   ```
-5. Ouvrez une **Pull Request** sur le dépôt principal.
