@@ -32,7 +32,7 @@ jobs:
   build-frontend:
     name: Build & Test Frontend
     runs-on: ubuntu-latest
-    needs: build-backend
+    needs: build-backend # Assure que le backend est construit avant le frontend
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -54,18 +54,18 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Recommandé : utiliser Node.js 18 (LTS)
+          node-version: '18'  # Utiliser Node.js 18 (LTS)
           always-auth: false
 
-      # Modification de toutes les références "client" en "frontend"
+      # Modification : Utilisation de "npm install" au lieu de "npm ci"
       - name: Install frontend dependencies
-        working-directory: frontend
-        run: npm ci  # Préférable à "npm install" pour la CI
+        working-directory: frontend # Assurez-vous que le dossier est bien 'frontend'
+        run: npm install # <--- MODIFICATION ICI
 
       - name: Build React App
-        working-directory: frontend
+        working-directory: frontend # Assurez-vous que le dossier est bien 'frontend'
         run: npm run build
 
       - name: Run frontend tests
-        working-directory: frontend
+        working-directory: frontend # Assurez-vous que le dossier est bien 'frontend'
         run: npm test -- --watchAll=false
