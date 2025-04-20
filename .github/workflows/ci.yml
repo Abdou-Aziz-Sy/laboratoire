@@ -49,19 +49,77 @@ jobs:
             echo "No .gitmodules file found."
           fi
 
+      - name: List directory structure
+        run: find . -type f -name "package.json" | sort
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Updated to Node.js 20 for react-router-dom v7 compatibility
+          node-version: '20'
           
       - name: Install frontend dependencies
-        run: npm install  # Removed working-directory as it appears the app is in the root
+        run: |
+          # Check if frontend directory exists and contains package.json
+          if [ -f "frontend/package.json" ]; then
+            cd frontend
+            npm install
+          # Check if client directory exists and contains package.json
+          elif [ -f "client/package.json" ]; then
+            cd client
+            npm install
+          # Try to find package.json in any subdirectory
+          else
+            PACKAGE_JSON_DIR=$(find . -name "package.json" -not -path "*/node_modules/*" | head -n 1 | xargs dirname)
+            if [ -n "$PACKAGE_JSON_DIR" ]; then
+              echo "Found package.json in $PACKAGE_JSON_DIR"
+              cd "$PACKAGE_JSON_DIR"
+              npm install
+            else
+              echo "Error: Could not find package.json in any directory"
+              exit 1
+            fi
+          fi
 
       - name: Build React App
-        run: npm run build
+        run: |
+          # Check if frontend directory exists and contains package.json
+          if [ -f "frontend/package.json" ]; then
+            cd frontend
+            npm run build
+          # Check if client directory exists and contains package.json
+          elif [ -f "client/package.json" ]; then
+            cd client
+            npm run build
+          # Try to find package.json in any subdirectory
+          else
+            PACKAGE_JSON_DIR=$(find . -name "package.json" -not -path "*/node_modules/*" | head -n 1 | xargs dirname)
+            if [ -n "$PACKAGE_JSON_DIR" ]; then
+              cd "$PACKAGE_JSON_DIR"
+              npm run build
+            else
+              echo "Error: Could not find package.json in any directory"
+              exit 1
+            fi
+          fi
 
       - name: Run frontend tests
         run: |
-          # Install Jest dependencies for testing
-          npm install --save-dev jest-dom @testing-library/react
-          npm test -- --watchAll=false
+          # Check if frontend directory exists and contains package.json
+          if [ -f "frontend/package.json" ]; then
+            cd frontend
+            npm test -- --watchAll=false
+          # Check if client directory exists and contains package.json
+          elif [ -f "client/package.json" ]; then
+            cd client
+            npm test -- --watchAll=false
+          # Try to find package.json in any subdirectory
+          else
+            PACKAGE_JSON_DIR=$(find . -name "package.json" -not -path "*/node_modules/*" | head -n 1 | xargs dirname)
+            if [ -n "$PACKAGE_JSON_DIR" ]; then
+              cd "$PACKAGE_JSON_DIR"
+              npm test -- --watchAll=false
+            else
+              echo "Error: Could not find package.json in any directory"
+              exit 1
+            fi
+          fi
