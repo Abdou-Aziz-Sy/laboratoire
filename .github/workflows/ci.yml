@@ -32,7 +32,6 @@ jobs:
   build-frontend:
     name: Build & Test Frontend
     runs-on: ubuntu-latest
-    needs: build-backend # Assure que le backend est construit avant le frontend
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -40,7 +39,6 @@ jobs:
           fetch-depth: 1
           submodules: false
 
-      # Mise à jour du commentaire pour refléter le nouveau nom
       - name: Remove .gitmodules if exists
         run: |
           if [ -f .gitmodules ]; then
@@ -54,18 +52,16 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Utiliser Node.js 18 (LTS)
-          always-auth: false
-
-      # Modification : Utilisation de "npm install" au lieu de "npm ci"
+          node-version: '20'  # Updated to Node.js 20 for react-router-dom v7 compatibility
+          
       - name: Install frontend dependencies
-        working-directory: frontend # Assurez-vous que le dossier est bien 'frontend'
-        run: npm install # <--- MODIFICATION ICI
+        run: npm install  # Removed working-directory as it appears the app is in the root
 
       - name: Build React App
-        working-directory: frontend # Assurez-vous que le dossier est bien 'frontend'
         run: npm run build
 
       - name: Run frontend tests
-        working-directory: frontend # Assurez-vous que le dossier est bien 'frontend'
-        run: npm test -- --watchAll=false
+        run: |
+          # Install Jest dependencies for testing
+          npm install --save-dev jest-dom @testing-library/react
+          npm test -- --watchAll=false
