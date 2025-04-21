@@ -40,7 +40,6 @@ jobs:
           fetch-depth: 1
           submodules: false
 
-      # Mise à jour du commentaire pour refléter le nouveau nom
       - name: Remove .gitmodules if exists
         run: |
           if [ -f .gitmodules ]; then
@@ -51,16 +50,18 @@ jobs:
             echo "No .gitmodules file found."
           fi
 
+      # Modification : Utiliser Node.js 20
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Recommandé : utiliser Node.js 18 (LTS)
+          node-version: '20' # <--- MODIFICATION ICI (passer de 18 à 20)
           always-auth: false
 
-      # Modification de toutes les références "client" en "frontend"
+      # Revenir à npm ci est généralement préférable si possible
+      # Si le passage à Node 20 résout le problème, vous pouvez retester avec npm ci
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm ci  # Préférable à "npm install" pour la CI
+        run: npm install # Gardons npm install pour l'instant
 
       - name: Build React App
         working-directory: frontend
