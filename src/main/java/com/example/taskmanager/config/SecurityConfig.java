@@ -12,28 +12,34 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 	
-	 @Bean
-	    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-	        http
-	            .csrf(csrf -> csrf.disable()) // désactiver CSRF pour Postman
-	            .authorizeHttpRequests(auth -> auth
-	                    // Autoriser Swagger
-	                    .requestMatchers(
-	                        "/swagger-ui.html",
-	                        "/swagger-ui/**",
-	                        "/v3/api-docs/**",
-	                        "/swagger-resources/**",
-	                        "/webjars/**"
-	                    ).permitAll()
-	                    // Autoriser l'inscription des utilisateurs
-	                    .requestMatchers(HttpMethod.POST, "/api/users/**").permitAll()
-	                    // Toutes les autres requêtes nécessitent une auth
-	                    .anyRequest().authenticated()
-	            )
-	            .httpBasic(); // ou formLogin si tu préfères
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	    http
+	        .csrf(csrf -> csrf.disable()) // désactiver CSRF pour Postman ou les tests
+	        .authorizeHttpRequests(auth -> auth
+	            // Autoriser Swagger
+	            .requestMatchers(
+	                "/swagger-ui.html",
+	                "/swagger-ui/**",
+	                "/v3/api-docs/**",
+	                "/swagger-resources/**",
+	                "/webjars/**"
+	            ).permitAll()
 
-	        return http.build();
-	    }
+	            // Autoriser l'inscription
+	            .requestMatchers(HttpMethod.POST, "/api/users/**").permitAll()
+
+	            // Autoriser l'activation par token
+	            .requestMatchers(HttpMethod.GET, "/api/users/activate").permitAll()
+
+	            // Toute autre requête doit être authentifiée
+	            .anyRequest().authenticated()
+	        )
+	        .httpBasic(); // ou formLogin() selon ton besoin
+
+	    return http.build();
+	}
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
