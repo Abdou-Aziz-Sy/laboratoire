@@ -1,0 +1,12 @@
+/* --- fichier: frontend/src/pages/LoginPage.module.css --- */
+
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    background-color: #f8f9fa;
+  }
+  
