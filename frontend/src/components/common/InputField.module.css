@@ -1,0 +1,54 @@
+/* --- fichier: frontend/src/components/common/InputField.module.css --- */
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem; /* Ajustez l'espacement vertical si nécessaire */
+    width: 100%;
+  }
+  
+  .label {
+    margin-bottom: 0.35rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #495057; /* Couleur de label standard */
+    display: block; /* Assure qu'il prend sa propre ligne */
+  }
+  
+  .requiredIndicator {
+    color: #dc3545; /* Rouge pour indiquer requis */
+    margin-left: 0.25rem;
+  }
+  
+  .input {
+    padding: 0.8rem 1rem;
+    border: 1px solid #ced4da; /* Bordure grise standard */
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%; /* Prend toute la largeur disponible */
+    box-sizing: border-box; /* Inclut padding et border dans la largeur */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  
+  .input:focus {
+    border-color: #007bff; /* Bleu au focus */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+  }
+  
+  /* Styles appliqués lorsque la prop 'error' est présente */
+  .inputError .input {
+    border-color: #dc3545 !important; /* Rouge pour l'erreur */
+  }
+  
+  .inputError .input:focus {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important; /* Ombre focus rouge */
+  }
+  
+  .errorMessage {
+    color: #dc3545; /* Couleur du texte d'erreur */
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    min-height: 1em; /* Évite les sauts de layout si l'erreur apparaît/disparaît */
+  }
