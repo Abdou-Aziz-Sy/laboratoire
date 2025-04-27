@@ -1,0 +1,29 @@
+/* --- fichier: frontend/src/pages/RegistrationPage.module.css --- */
+
+.pageContainer {
+    display: flex;
+    flex-direction: column; /* Aligne le formulaire et le lien en colonne */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Prend toute la hauteur de la vue */
+    padding: 2rem 1rem; /* Padding pour éviter que le contenu colle aux bords */
+    background-color: #f8f9fa; /* Fond gris très clair */
+    /* Optionnel : un dégradé subtil */
+    /* background-image: linear-gradient(to top, #e9ecef 0%, #f8f9fa 100%); */
+  }
+  
+  .loginLink {
+    margin-top: 1.5rem; /* Espace entre le formulaire et le lien */
+    font-size: 0.9rem;
+    color: #495057;
+  }
+  
+  .loginLink a {
+    color: #007bff; /* Couleur primaire pour le lien */
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .loginLink a:hover {
+    text-decoration: underline;
+  }
