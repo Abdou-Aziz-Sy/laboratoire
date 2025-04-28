@@ -59,7 +59,7 @@ echo "server.port=8080" > src/main/resources/application.properties
 
 ```bash
 cd frontend
-npm intall
+npm install
 ```
 
 3. **Configurer le proxy**  
