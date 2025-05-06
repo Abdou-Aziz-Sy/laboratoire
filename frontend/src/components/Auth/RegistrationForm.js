@@ -1,15 +1,16 @@
 // --- fichier: frontend/src/components/Auth/RegistrationForm.js ---
-import React, { useState, useCallback, useMemo } from 'react'; // Ajout de useCallback et useMemo
+import React, { useCallback, useMemo, useState } from 'react'; // Ajout de useCallback et useMemo
 import { useNavigate } from 'react-router-dom';
-import styles from './RegistrationForm.module.css';
-import { InputField } from '../common/InputField';
-import { Button } from '../common/Button';
 import { register } from '../../api/authService';
+import { Button } from '../common/Button';
+import { InputField } from '../common/InputField';
+import styles from './RegistrationForm.module.css';
 
 function RegistrationForm() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    nomComplet: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -35,13 +36,13 @@ function RegistrationForm() {
   const checkFieldValidity = useCallback((name, value, currentFormData) => {
     let error = null;
     if (!value || (typeof value === 'string' && !value.trim())) {
-      error = 'Ce champ est requis.';
+        error = 'Ce champ est requis.';
     } else if (name === 'email' && !validateEmail(value)) {
-      error = "Format d'email invalide.";
+        error = "Format d'email invalide.";
     } else if (name === 'password' && !validatePassword(value)) {
-      error = 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.';
+        error = 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.';
     } else if (name === 'confirmPassword' && value !== currentFormData.password) {
-      error = 'Les mots de passe ne correspondent pas.';
+        error = 'Les mots de passe ne correspondent pas.';
     }
     return error;
   }, []); // useCallback car les fonctions validateEmail/Password ne changent pas
@@ -106,19 +107,16 @@ function RegistrationForm() {
     e.preventDefault();
     setApiError(null);
 
-    // Marque tous les champs comme touchés pour afficher toutes les erreurs
     const allTouched = Object.keys(formData).reduce((acc, key) => ({ ...acc, [key]: true }), {});
     setTouchedFields(allTouched);
 
-    // Calcule toutes les erreurs actuelles
     const currentErrors = Object.keys(formData).reduce((acc, name) => {
         const error = checkFieldValidity(name, formData[name], formData);
         if (error) acc[name] = error;
         return acc;
     }, {});
-    setValidationErrors(currentErrors); // Met à jour l'état des erreurs
+    setValidationErrors(currentErrors);
 
-    // Vérifie s'il y a des erreurs après mise à jour
     if (Object.keys(currentErrors).length === 0) {
         setIsLoading(true);
         try {
@@ -133,7 +131,7 @@ function RegistrationForm() {
             console.error("Erreur API Inscription:", error);
         }
     } else {
-      console.log('Formulaire invalide', currentErrors);
+        console.log('Formulaire invalide', currentErrors);
     }
   };
 
@@ -146,15 +144,28 @@ function RegistrationForm() {
       {apiError && <div className={styles.apiError}>{apiError}</div>}
 
       <InputField
-        label="Nom complet"
+        label="Prénom"
         type="text"
-        name="nomComplet"
-        id="nomComplet"
-        value={formData.nomComplet}
+        name="firstName"
+        id="firstName"
+        value={formData.firstName}
         onChange={handleChange}
         onBlur={handleBlur}
-        placeholder="Entrez votre nom complet"
-        error={touchedFields.nomComplet ? validationErrors.nomComplet : null} // Affiche erreur seulement si touché
+        placeholder="Entrez votre prénom"
+        error={touchedFields.firstName ? validationErrors.firstName : null} // Affiche erreur seulement si touché
+        required
+      />
+
+      <InputField
+        label="Nom"
+        type="text"
+        name="lastName"
+        id="lastName"
+        value={formData.lastName}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        placeholder="Entrez votre nom"
+        error={touchedFields.lastName ? validationErrors.lastName : null} // Affiche erreur seulement si touché
         required
       />
 

@@ -1,11 +1,11 @@
 // --- fichier: frontend/src/components/Auth/LoginForm.js ---
 import React, { useState } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
-import styles from './LoginForm.module.css';
-import { InputField } from '../common/InputField'; // Assurez l'import nommé
-import { Button } from '../common/Button';       // Assurez l'import nommé
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { login } from '../../api/authService';
 import { useAuth } from '../../context/AuthContext'; // Importe le hook du contexte
+import { Button } from '../common/Button'; // Assurez l'import nommé
+import { InputField } from '../common/InputField'; // Assurez l'import nommé
+import styles from './LoginForm.module.css';
 
 function LoginForm() {
   const navigate = useNavigate();

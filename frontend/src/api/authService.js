@@ -1,7 +1,7 @@
 // --- fichier: frontend/src/api/authService.js ---
 
 // Adapter ces URLs à la configuration de votre backend
-const BASE_URL = '/api/auth'; // Base pour les endpoints d'authentification
+const BASE_URL = 'http://localhost:8081/api/users'; // Base pour les endpoints d'authentification
 const API_BASE_URL = '/api'; // Base pour les autres endpoints API (ex: /api/users/me)
 
 // --- Gestion du Token ---
@@ -47,74 +47,64 @@ export const removeAuthToken = () => {
  * @returns {Promise<any>} La réponse JSON parsée ou null si réponse 204.
  * @throws {Error} Lance une erreur en cas de réponse non-OK ou d'échec du parsing.
  */
-const fetchWithAuth = async (url, options = {}) => {
-    const token = getAuthToken();
+export async function fetchWithAuth(url, options = {}) {
     const headers = {
-      'Content-Type': 'application/json', // Défaut pour les requêtes API
-      ...options.headers, // Permet de surcharger ou ajouter des en-têtes
+        ...options.headers,
+        "Content-Type": "application/json",
     };
 
-    // Ajoute le token Bearer si existant et non explicitement ignoré
-    if (token && !options.skipAuth) {
-      headers['Authorization'] = `Bearer ${token}`;
+    // ❗ Exclure les URLs publiques comme /login et /register
+    if (!url.includes("/login") && !url.includes("/register")) {
+        const token = localStorage.getItem("authToken"); // Utilise la clé authToken pour récupérer le token
+        if (token) {
+            headers["Authorization"] = `Bearer ${token}`;
+        }
     }
 
-    try {
-      const response = await fetch(url, { ...options, headers });
+    const response = await fetch(url, {
+        ...options,
+        headers,
+    });
 
-      // Gestion des réponses non-OK
-      if (!response.ok) {
-          let errorData;
-          try {
-              // Tente de lire le message d'erreur du backend
-              errorData = await response.json();
-          } catch (e) {
-              // Si le corps de l'erreur n'est pas JSON ou est vide
-              errorData = { message: `Erreur ${response.status}: ${response.statusText}` };
-          }
-          // Lance une erreur avec le message (du backend si possible)
-          throw new Error(errorData?.message || `Erreur ${response.status}`);
-      }
-
-       // Gère le cas spécifique du statut 204 No Content (succès sans corps)
-       if (response.status === 204) {
-          return null; // Ou { success: true } selon la convention souhaitée
-       }
-
-       // Tente de parser la réponse en JSON
-       // Gère le cas où l'API renvoie du succès mais pas de JSON (ex: simple texte ou vide)
-       const contentType = response.headers.get("content-type");
-       if (contentType && contentType.includes("application/json")) {
-           return response.json();
-       } else {
-           // Si pas JSON, on peut retourner une indication de succès ou le texte brut
-           // console.warn(`Réponse non-JSON reçue de ${url}`);
-           // return { success: true }; // Ou ce qui est le plus logique
-           return await response.text(); // Ou retourner le texte brut
-       }
-
-    } catch (error) {
-        console.error(`Erreur Fetch pour ${url}:`, error);
-        // Remonte l'erreur pour qu'elle soit gérée par l'appelant
-        // On pourrait ajouter une couche de gestion d'erreur plus spécifique ici
-        throw error;
+    if (!response.ok) {
+        const message = await response.text();
+        throw new Error(`Erreur ${response.status}: ${message}`);
     }
-};
 
+    // Vérifie si la réponse est au format JSON
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+        return response.json();
+    } else {
+        return response.text(); // Retourne le texte brut si ce n'est pas du JSON
+    }
+}
 
 // --- Fonctions Spécifiques à l'API d'Authentification ---
 
 /**
  * Enregistre un nouvel utilisateur.
  * @param {object} userData - Données utilisateur (nomComplet, email, password).
- * @returns {Promise<any>} Réponse de l'API (peut être vide ou contenir des infos).
+ * @returns {Promise<any>}
  */
 export const register = async (userData) => {
-  return fetchWithAuth(`${BASE_URL}/register`, {
-    method: 'POST',
-    body: JSON.stringify(userData),
-    skipAuth: true, // Pas besoin d'être authentifié pour s'inscrire
-  });
+    try {
+        const response = await fetchWithAuth(`${BASE_URL}/register`, {
+            method: 'POST',
+            body: JSON.stringify(userData),
+            skipAuth: true,
+        });
+        console.log("Inscription réussie :", response);
+        return response;
+    } catch (error) {
+        if (error.message.includes('409')) {
+            console.error("Erreur : Cet email est déjà utilisé.");
+            throw new Error("Cet email est déjà utilisé.");
+        } else {
+            console.error("Erreur lors de l'inscription :", error.message);
+            throw error;
+        }
+    }
 };
 
 /**
@@ -124,21 +114,28 @@ export const register = async (userData) => {
  * @returns {Promise<{token: string, user: object}>} Données de connexion.
  */
 export const login = async (credentials) => {
-    console.log("Tentative de connexion avec:", credentials);
-    // L'endpoint est souvent /authenticate avec Spring Security ou /login
-    const data = await fetchWithAuth(`${BASE_URL}/authenticate`, {
-      method: 'POST',
-      body: JSON.stringify(credentials),
-      skipAuth: true, // Pas besoin d'être authentifié pour se connecter
-    });
-    console.log("Réponse API Login:", data);
+    console.log("Tentative de connexion avec :", credentials);
+    try {
+        const response = await fetch(`${BASE_URL}/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(credentials),
+        });
 
-    // Vérification plus robuste de la réponse attendue
-    if (!data || typeof data.token !== 'string' || !data.token || typeof data.user !== 'object') {
-        console.error("Réponse invalide du serveur lors de la connexion:", data);
-        throw new Error("Réponse invalide du serveur lors de la connexion. Token ou utilisateur manquant.");
+        if (!response.ok) {
+            const errorData = await response.text();
+            throw new Error(`Erreur serveur ${response.status}: ${errorData}`);
+        }
+
+        const data = await response.json();
+        console.log("Réponse API Login :", data);
+        return data;
+    } catch (error) {
+        console.error("Erreur API Connexion :", error);
+        throw new Error("Une erreur s'est produite lors de la connexion. Veuillez réessayer.");
     }
-    return data; // Retourne { token, user }
 };
 
 /**
@@ -148,7 +145,7 @@ export const login = async (credentials) => {
  */
 export const getCurrentUser = async () => {
     // L'endpoint dépend de votre configuration backend (ex: /users/me, /auth/profile)
-    return fetchWithAuth(`${API_BASE_URL}/users/me`, { // Adaptez cet endpoint
+    return fetchWithAuth(`${API_BASE_URL}/users`, { // Adaptez cet endpoint
         method: 'GET',
     });
 };
