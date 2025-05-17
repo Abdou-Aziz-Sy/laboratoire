@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Table(name = "users")
@@ -31,6 +34,10 @@ public class User {
 	private LocalDateTime resetPasswordTokenExpire;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Task> tasks = new ArrayList<>();
+
 
     public Long getId() {
 		return id;
@@ -129,5 +136,25 @@ public class User {
 	public void setResetPasswordTokenExpire(LocalDateTime resetPasswordTokenExpire) {
 		this.resetPasswordTokenExpire = resetPasswordTokenExpire;
 	}
+
+	public List<Task> getTasks() {
+    return tasks;
+}
+
+public void setTasks(List<Task> tasks) {
+    this.tasks = tasks;
+}
+
+// Méthodes utilitaires pour gérer la relation bidirectionnelle
+public void addTask(Task task) {
+    tasks.add(task);
+    task.setUser(this);
+}
+
+public void removeTask(Task task) {
+    tasks.remove(task);
+    task.setUser(null);
+}
+
 
 }
