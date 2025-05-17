@@ -20,4 +20,15 @@ public class EmailService {
 
         mailSender.send(message);
     }
-}
+
+    public void sendPasswordResetEmail(String to, String resetToken) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject("Réinitialisation de votre mot de passe");
+        message.setText("Cliquez sur le lien pour réinitialiser votre mot de passe : " +
+                "http://localhost:8081/reset-password?token=" + resetToken);
+
+        mailSender.send(message);
+    }
+
+    }

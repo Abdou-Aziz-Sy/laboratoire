@@ -1,6 +1,8 @@
 package com.example.taskmanager.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -86,5 +88,52 @@ public class UserService {
     public void sendPasswordResetEmail(String email) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'sendPasswordResetEmail'");
+    }
+
+    // Creation de token de recuperation de mot de passe
+
+    public String createPasswordToken(String email)
+    {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser.isPresent())
+        {
+            User user = optionalUser.get();
+            String token = UUID.randomUUID().toString();
+
+            LocalDateTime expire = LocalDateTime.now().plusHours(24);
+
+            user.setResetPasswordToken(token);
+            user.setResetPasswordTokenExpire(expire);
+            userRepository.save(user);
+
+            return token;
+
+        }
+        return null;
+    }
+
+    /**
+     * Valide un token de réinitialisation et change le mot de passe
+     * @param token Le token de réinitialisation
+     * @param newPassword Le nouveau mot de passe
+     * @return true si réussi, false sinon
+     */
+
+    public boolean resetPassword(String token, String newPassword)
+    {
+        Optional<User> optionalUser = userRepository.findByResetPasswordToken(token);
+        if (optionalUser.isPresent())
+        {
+            User user = optionalUser.get();
+            if (user.getResetPasswordTokenExpire().isAfter(LocalDateTime.now()))
+            {
+                user.setPassword(passwordEncoder.encode(newPassword));
+                user.setResetPasswordToken(null);
+                user.setResetPasswordTokenExpire(null);
+                userRepository.save(user);
+            }
+            return true;
+        }
+        return false;
     }
 }

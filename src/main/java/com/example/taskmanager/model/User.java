@@ -26,6 +26,9 @@ public class User {
     private String lastName;
     private boolean active = false;
     private String activationToken;
+	private String resetPasswordToken;
+	@Column(name = "reset_token_expiry")
+	private LocalDateTime resetPasswordTokenExpire;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -109,6 +112,22 @@ public class User {
 	@PrePersist
 	protected void onCreate() {
 	    createdAt = LocalDateTime.now();
+	}
+
+	public String getResetPasswordToken() {
+		return resetPasswordToken;
+	}
+
+	public void setResetPasswordToken(String resetPasswordToken) {
+		this.resetPasswordToken = resetPasswordToken;
+	}
+
+	public LocalDateTime getResetPasswordTokenExpire() {
+		return resetPasswordTokenExpire;
+	}
+
+	public void setResetPasswordTokenExpire(LocalDateTime resetPasswordTokenExpire) {
+		this.resetPasswordTokenExpire = resetPasswordTokenExpire;
 	}
 
 }
