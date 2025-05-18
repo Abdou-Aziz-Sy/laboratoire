@@ -40,9 +40,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/users/register",
                                 "/api/users/login",
+                                "/api/users/activate",
                                 "/api/users/forgot-password",
                                 "/api/users/password/reset-request",
-                                "/api/users/password/reset",// Ajoutez cet endpoint
+                                "/api/users/password/reset",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**")
                         .permitAll()

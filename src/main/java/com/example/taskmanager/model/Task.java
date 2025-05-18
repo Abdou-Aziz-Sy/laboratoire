@@ -148,7 +148,3 @@ public class Task {
     }
 }
 
-// Enum pour la priorité des tâches
-enum TaskPriority {
-    BASSE, MOYENNE, ELEVE, URGENT
-}
