@@ -1,0 +1,51 @@
+/* --- fichier: frontend/src/pages/HomePage.module.css --- */
+
+.homeContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.mainContent {
+  flex: 1;
+}
+
+/* Placeholders pour les sections - seront remplacés dans les phases suivantes */
+.sectionPlaceholder {
+  padding: 5rem 2rem;
+  text-align: center;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.sectionPlaceholder:nth-child(odd) {
+  background-color: #f8f9fa;
+}
+
+.sectionPlaceholder h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
+}
+
+.sectionPlaceholder p {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  color: #6c757d;
+}
+
+/* Media Queries pour la responsivité */
+@media (max-width: 768px) {
+  .sectionPlaceholder {
+    padding: 3rem 1.5rem;
+  }
+  
+  .sectionPlaceholder h2 {
+    font-size: 2rem;
+  }
+  
+  .sectionPlaceholder p {
+    font-size: 1rem;
+  }
+}
