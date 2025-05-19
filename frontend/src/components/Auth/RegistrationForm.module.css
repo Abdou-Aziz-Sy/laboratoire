@@ -3,103 +3,172 @@
 .registrationForm {
   display: flex;
   flex-direction: column;
-  gap: 1rem; /* Espace entre les éléments du formulaire */
+  gap: 1.5rem;
   width: 100%;
-  padding: 1.5rem; /* Padding intérieur pour la carte */
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Ombre portée discrète */
-  max-width: 450px; /* Largeur maximale sur les grands écrans */
-  margin: 0 auto; /* Centrage horizontal */
+  color: var(--white);
 }
 
-.registrationForm h2 {
+.formTitle {
   text-align: center;
-  margin-bottom: 1.5rem;
-  color: #333;
-  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: var(--white);
+  position: relative;
+  display: inline-block;
+  align-self: center;
 }
 
-/* Style pour InputField et Button (si les composants communs ne gèrent pas tout) */
-/* Ces styles s'appliqueront aux classes générées par les composants enfants */
-.registrationForm input { /* Style générique pour les inputs si InputField ne le fait pas */
-  padding: 0.8rem 1rem;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  font-size: 1rem;
-  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+.formTitle::after {
+  content: '';
+  position: absolute;
+  width: 40%;
+  height: 3px;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(253, 126, 20, 0.6);
+  border-radius: 2px;
 }
 
-.registrationForm input:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+.inputRow {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 576px) {
+  .inputRow {
+    flex-direction: row;
+  }
+  
+  .inputRow .inputGroup {
+    flex: 1;
+  }
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formInput {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: var(--white) !important;
+  padding: 0.8rem 1rem !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.formInput:focus {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
   outline: none;
 }
 
-/* Style pour le bouton si Button ne le fait pas */
+.formInput::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.formInput:hover {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Style pour le bouton */
 .submitButton {
-  padding: 0.8rem 1.5rem;
-  background-color: #007bff;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, rgba(253, 126, 20, 0.8) 0%, rgba(253, 76, 20, 0.9) 100%);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 50px;
   font-size: 1.1rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-  margin-top: 1rem; /* Espace au-dessus du bouton */
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .submitButton:hover:not(:disabled) {
-  background-color: #0056b3; /* Bleu plus foncé au survol */
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, rgba(253, 126, 20, 0.9) 0%, rgba(253, 76, 20, 1) 100%);
 }
 
 .submitButton:disabled {
-  background-color: #6c757d; /* Gris quand désactivé */
+  background: rgba(255, 255, 255, 0.2);
   cursor: not-allowed;
+  color: rgba(255, 255, 255, 0.5);
 }
 
-/* Style spécifique pour l'affichage des erreurs (à ajuster selon InputField) */
-/* Si InputField a une classe pour l'erreur, cibler cette classe */
-.inputError input { /* Exemple : si InputField ajoute cette classe à son conteneur */
-    border-color: #dc3545 !important; /* Rouge pour l'erreur */
+.submitButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+  transform: translateX(-100%);
 }
 
-.inputError input:focus {
-    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important; /* Ombre focus rouge */
+.submitButton:hover:not(:disabled)::before {
+  animation: buttonShine 1.5s infinite;
 }
 
-/* Style pour le texte d'erreur (si InputField n'a pas son propre affichage) */
+@keyframes buttonShine {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Style pour le texte d'erreur */
 .errorText {
-  color: #dc3545;
+  color: rgba(255, 87, 87, 0.9);
   font-size: 0.85rem;
   margin-top: 0.25rem;
 }
 
 .passwordHint {
   font-size: 0.8rem;
-  color: #6c757d; /* Gris pour l'indice */
-  margin-top: -0.75rem; /* Rapproche l'indice du champ */
-  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.25rem;
 }
 
 .apiError {
-  background-color: rgba(220, 53, 69, 0.1); /* Fond rouge léger */
-  color: #721c24; /* Texte rouge foncé */
-  border: 1px solid rgba(220, 53, 69, 0.2);
-  border-radius: 4px;
-  padding: 0.75rem 1.25rem;
-  margin-bottom: 1rem;
-  text-align: center;
+  background-color: rgba(255, 87, 87, 0.1);
+  color: rgba(255, 87, 87, 0.9);
+  border: 1px solid rgba(255, 87, 87, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
   font-size: 0.9rem;
+  text-align: center;
 }
 
-/* --- Responsivité --- */
-/* Par défaut (Mobile-First) : Le formulaire prendra la largeur dispo */
+/* Loading spinner */
+.loadingSpinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
 
-/* Tablettes et petits desktops */
-@media (min-width: 768px) {
-  .registrationForm {
-    padding: 2rem; /* Plus d'espace intérieur */
-  }
+.spinner {
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
