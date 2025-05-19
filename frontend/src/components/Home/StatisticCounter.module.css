@@ -1,0 +1,51 @@
+/* --- fichier: frontend/src/components/Home/StatisticCounter.module.css --- */
+
+.statisticItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+  
+  .statValue {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    line-height: 1;
+    position: relative;
+  }
+  
+  .statValue::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    width: 40px;
+    height: 3px;
+    background-color: var(--primary-color);
+    transform: translateX(-50%);
+    border-radius: 1.5px;
+    opacity: 0.7;
+  }
+  
+  .statLabel {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-light);
+    margin-top: 1rem;
+  }
+  
+  @media (max-width: 767px) {
+    .statisticItem {
+      padding: 1.5rem 0;
+    }
+    
+    .statValue {
+      font-size: 2.5rem;
+    }
+    
+    .statLabel {
+      font-size: 0.9rem;
+    }
+  }
