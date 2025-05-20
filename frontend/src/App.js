@@ -1,4 +1,4 @@
-// --- fichier: frontend/src/App.js ---
+// --- modification de frontend/src/App.js ---
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { getAuthToken } from './api/authService';
@@ -11,6 +11,9 @@ import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import FeaturesPage from './pages/FeaturesPage';
+import PricingPage from './pages/PricingPage'; // Ajout de l'import pour la page de tarification
+import ContactPage from './pages/ContactPage'; // Ajout de l'import pour la page de contact
 
 // Page temporaire pour les routes non encore implémentées
 const TemporaryPage = ({ pageName }) => (
@@ -38,6 +41,10 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/reset-password/:resetToken" element={<ResetPasswordPage />} />
+          <Route path="/fonctionnalites" element={<FeaturesPage />} />
+          <Route path="/features" element={<FeaturesPage />} />
+          <Route path="/pricing" element={<PricingPage />} /> {/* Route pour la page de tarification */}
+          <Route path="/contact" element={<ContactPage />} /> {/* Nouvelle route pour la page de contact */}
           
           {/* Routes protégées temporaires */}
           <Route path="/dashboard" element={<PrivateRoute element={<TemporaryPage pageName="Tableau de bord" />} />} />
