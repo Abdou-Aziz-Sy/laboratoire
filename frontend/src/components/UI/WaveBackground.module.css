@@ -1,0 +1,95 @@
+/* WaveBackground.module.css */
+.waveContainer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: -1;
+  background: linear-gradient(135deg, #111, #1a1a1a, #222);
+}
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background-repeat: repeat-x;
+  opacity: 0.2;
+}
+
+/* Style des vagues avec des gradients */
+.wave1 {
+  background: linear-gradient(transparent 50%, rgba(253, 126, 20, 0.3) 100%);
+  background-size: 50% 80px;
+  z-index: 4;
+  animation: wave 10s linear infinite;
+  bottom: -25%;
+  opacity: 0.08;
+  border-radius: 40%;
+  height: 60%;
+}
+
+.wave2 {
+  background: linear-gradient(transparent 50%, rgba(253, 126, 20, 0.2) 100%);
+  background-size: 50% 100px;
+  z-index: 3;
+  animation: wave 12s linear infinite reverse;
+  bottom: -35%;
+  opacity: 0.05;
+  border-radius: 45%;
+  height: 70%;
+}
+
+.wave3 {
+  background: linear-gradient(transparent 50%, rgba(253, 126, 20, 0.15) 100%);
+  background-size: 50% 120px;
+  z-index: 2;
+  animation: wave 15s linear infinite;
+  bottom: -45%;
+  opacity: 0.03;
+  border-radius: 48%;
+  height: 80%;
+}
+
+.wave4 {
+  background: linear-gradient(transparent 50%, rgba(253, 126, 20, 0.1) 100%);
+  background-size: 50% 140px;
+  z-index: 1;
+  animation: wave 20s linear infinite reverse;
+  bottom: -50%;
+  opacity: 0.02;
+  border-radius: 52%;
+  height: 85%;
+}
+
+/* Animation des vagues */
+@keyframes wave {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Particules/étoiles en arrière-plan */
+.particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.particle {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  animation: twinkle linear infinite;
+}
+
+@keyframes twinkle {
+  0% { transform: translateY(0) scale(1); opacity: 0.2; }
+  50% { transform: translateY(-20px) scale(1.2); opacity: 0.5; }
+  100% { transform: translateY(0) scale(1); opacity: 0.2; }
+}
