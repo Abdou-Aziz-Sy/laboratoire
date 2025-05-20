@@ -1,0 +1,302 @@
+/* --- fichier: frontend/src/components/common/ProtectedNavbar.module.css --- */
+
+.navbar {
+  background: rgba(18, 18, 20, 0.95);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.75rem 1.5rem;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+  font-weight: 700;
+  font-size: 1.4rem;
+  transition: all 0.3s ease;
+}
+
+.logo:hover {
+  transform: translateY(-1px);
+}
+
+.logoIcon {
+  font-size: 1.3rem;
+  margin-right: 0.5rem;
+}
+
+.logoText {
+  background: linear-gradient(90deg, #fff, rgba(253, 126, 20, 0.8));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Navigation Links */
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.85);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.navLink:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.navIcon {
+  margin-right: 0.5rem;
+  font-size: 1.2em;
+}
+
+/* Active link */
+.active {
+  color: rgba(253, 126, 20, 1);
+  background: rgba(253, 126, 20, 0.1);
+  position: relative;
+}
+
+.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(253, 126, 20, 0.5), rgba(253, 126, 20, 0.8));
+  border-radius: 3px 3px 0 0;
+}
+
+/* Profile dropdown */
+.profileDropdown {
+  position: relative;
+  margin-left: 0.5rem;
+}
+
+.profileButton {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: white;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.profileButton:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.profileIcon {
+  margin-right: 0.5rem;
+}
+
+.userName {
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdownArrow {
+  font-size: 0.7rem;
+  margin-left: 0.5rem;
+}
+
+.dropdownContent {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 120%;
+  min-width: 180px;
+  background: rgba(30, 30, 35, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+  animation: fadeIn 0.2s ease;
+}
+
+.profileDropdown:hover .dropdownContent {
+  display: block;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.7rem 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropdownItem:hover {
+  background: rgba(253, 126, 20, 0.15);
+  color: white;
+}
+
+.dropdownItem:first-child {
+  border-radius: 8px 8px 0 0;
+}
+
+.dropdownItem:last-child {
+  border-radius: 0 0 8px 8px;
+}
+
+.dropdownIcon {
+  margin-right: 0.5rem;
+}
+
+/* Menu toggle button (mobile) */
+.menuToggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 20;
+}
+
+.menuIcon {
+  display: block;
+  position: relative;
+  width: 24px;
+  height: 2px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.menuIcon::before,
+.menuIcon::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 2px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.menuIcon::before {
+  transform: translateY(-8px);
+}
+
+.menuIcon::after {
+  transform: translateY(8px);
+}
+
+/* Menu toggle animation */
+.menuOpen .menuIcon {
+  background-color: transparent;
+}
+
+.menuOpen .menuIcon::before {
+  transform: rotate(45deg);
+}
+
+.menuOpen .menuIcon::after {
+  transform: rotate(-45deg);
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .menuToggle {
+    display: block;
+  }
+  
+  .navLinks {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 300px;
+    height: 100vh;
+    background: rgba(18, 18, 20, 0.98);
+    backdrop-filter: blur(10px);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 5rem 1.5rem 2rem;
+    transition: all 0.3s ease;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+    z-index: 15;
+    gap: 1rem;
+  }
+  
+  .menuOpen {
+    right: 0;
+  }
+  
+  .navLink {
+    width: 100%;
+    padding: 0.8rem 1rem;
+  }
+  
+  .profileDropdown {
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .profileButton {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .dropdownContent {
+    position: static;
+    box-shadow: none;
+    border: none;
+    background: rgba(40, 40, 45, 0.4);
+    margin-top: 0.5rem;
+    width: 100%;
+    display: none;
+  }
+  
+  .profileDropdown:focus-within .dropdownContent,
+  .profileDropdown:active .dropdownContent {
+    display: block;
+  }
+}
