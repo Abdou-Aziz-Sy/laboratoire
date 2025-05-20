@@ -1,0 +1,14 @@
+/* --- fichier: frontend/src/pages/PricingPage.module.css --- */
+
+.pricingPageContainer {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--primary-dark);
+  }
+  
+  .mainContent {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
