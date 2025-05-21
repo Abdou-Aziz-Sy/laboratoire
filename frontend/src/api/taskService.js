@@ -203,6 +203,48 @@ export const deleteTask = async (taskId) => {
 };
 
 /**
+ * Assigne une tâche à un ou plusieurs utilisateurs.
+ * @param {string} taskId - L'ID de la tâche à assigner.
+ * @param {Array<string>} userIds - Tableau d'IDs des utilisateurs à qui assigner la tâche.
+ * @returns {Promise<object>} Résultat de l'opération d'assignation.
+ */
+export const assignTask = async (taskId, userIds) => {
+    try {
+        if (!Array.isArray(userIds) || userIds.length === 0) {
+            throw new Error('Vous devez fournir au moins un utilisateur pour l\'assignation.');
+        }
+
+        const response = await fetchWithAuthTask(`${BASE_URL}/${taskId}/assign`, {
+            method: 'POST',
+            body: JSON.stringify({ userIds }),
+        });
+        console.log(`Tâche ${taskId} assignée avec succès aux utilisateurs:`, userIds);
+        return response;
+    } catch (error) {
+        console.error(`Erreur lors de l'assignation de la tâche ${taskId}:`, error);
+        throw error;
+    }
+};
+
+/**
+ * Récupère la liste des utilisateurs assignés à une tâche spécifique.
+ * @param {string} taskId - L'ID de la tâche.
+ * @returns {Promise<Array>} Liste des utilisateurs assignés à la tâche.
+ */
+export const getTaskAssignees = async (taskId) => {
+    try {
+        const response = await fetchWithAuthTask(`${BASE_URL}/${taskId}/assignees`, {
+            method: 'GET',
+        });
+        return response;
+    } catch (error) {
+        console.error(`Erreur lors de la récupération des assignés pour la tâche ${taskId}:`, error);
+        throw error;
+    }
+};
+
+
+/**
  * Récupère les statistiques des tâches de l'utilisateur.
  * @returns {Promise<object>} Statistiques des tâches (nombre par statut, priorité, etc.).
  */
