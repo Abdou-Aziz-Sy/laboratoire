@@ -18,6 +18,12 @@
   gap: 1rem;
 }
 
+.actionButtons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .pageTitle {
   font-size: 2.5rem;
   font-weight: 700;
@@ -40,13 +46,12 @@
   border-radius: 2px;
 }
 
-/* Bouton de création de tâche */
-.createButton {
+/* Boutons d'action */
+.createButton, .boardViewButton {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, rgba(253, 126, 20, 0.8) 0%, rgba(253, 76, 20, 0.9) 100%);
   color: white;
   border: none;
   border-radius: 50px;
@@ -58,10 +63,26 @@
   overflow: hidden;
 }
 
+.createButton {
+  background: linear-gradient(135deg, rgba(253, 126, 20, 0.8) 0%, rgba(253, 76, 20, 0.9) 100%);
+}
+
+.boardViewButton {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 .createButton:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   background: linear-gradient(135deg, rgba(253, 126, 20, 0.9) 0%, rgba(253, 76, 20, 1) 100%);
+}
+
+.boardViewButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(253, 126, 20, 0.5);
 }
 
 .createButton::before {
@@ -263,8 +284,13 @@
     align-items: flex-start;
   }
   
-  .createButton {
+  .actionButtons {
     width: 100%;
+    justify-content: space-between;
+  }
+  
+  .createButton, .boardViewButton {
+    flex: 1;
     justify-content: center;
   }
   
