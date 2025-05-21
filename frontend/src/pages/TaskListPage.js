@@ -6,6 +6,8 @@ import TaskItem from '../components/Tasks/TaskItem';
 import DeleteTaskModal from '../components/Tasks/DeleteTaskModal';
 import TaskStats from '../components/Tasks/TaskStats';
 import { useToast } from '../context/ToastContext';
+import { ToastContainer } from '../components/UI/Toast';
+import AssignmentNotification from '../components/Notifications/AssignmentNotification';
 import styles from './TaskListPage.module.css';
 
 /**
@@ -18,6 +20,7 @@ function TaskListPage() {
   const [error, setError] = useState(null);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, task: null });
   const [statsRefreshTrigger, setStatsRefreshTrigger] = useState(0); // Déclencheur de rafraîchissement des statistiques
+  const [assignmentNotification, setAssignmentNotification] = useState(null);
   const { showToast } = useToast();
 
   // Mémorisation de la fonction loadTasks pour éviter les re-renders inutiles
@@ -103,6 +106,20 @@ function TaskListPage() {
     }
   };
 
+  // Fonction appelée après une mise à jour des assignations
+  const handleAssignmentUpdate = (taskId, assignees, action) => {
+    // Afficher une notification d'assignation
+    setAssignmentNotification({
+      taskId,
+      assignees,
+      action, // 'assign' ou 'remove'
+      timestamp: new Date()
+    });
+    
+    // Mettre à jour les statistiques
+    setStatsRefreshTrigger(prev => prev + 1);
+  };
+
   return (
     <div className={styles.taskListContainer}>
       <div className={styles.pageHeader}>
@@ -171,6 +188,7 @@ function TaskListPage() {
               key={task.id} 
               task={task} 
               onDeleteClick={openDeleteModal}
+              onAssignmentUpdate={handleAssignmentUpdate}
             />
           ))}
         </div>
@@ -184,6 +202,17 @@ function TaskListPage() {
           isOpen={deleteModal.isOpen}
           onClose={closeDeleteModal}
           onSuccess={handleDeleteSuccess}
+        />
+      )}
+
+      {/* Notification d'assignation */}
+      {assignmentNotification && (
+        <AssignmentNotification
+          taskId={assignmentNotification.taskId}
+          assignees={assignmentNotification.assignees}
+          action={assignmentNotification.action}
+          timestamp={assignmentNotification.timestamp}
+          onClose={() => setAssignmentNotification(null)}
         />
       )}
     </div>

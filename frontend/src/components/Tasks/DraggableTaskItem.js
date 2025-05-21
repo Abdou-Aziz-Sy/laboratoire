@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 import { Draggable } from 'react-beautiful-dnd';
 import { useDragDrop } from '../../context/DragDropContext';
 import styles from './DraggableTaskItem.module.css';
+import AssigneesList from '../Users/AssigneesList';
+import UserSelectionModal from '../Users/UserSelectionModal';
+import useTaskAssignment from '../../hooks/useTaskAssignment';
 
 /**
  * Composant représentant un élément de tâche draggable dans le board de statuts
@@ -11,11 +14,28 @@ import styles from './DraggableTaskItem.module.css';
  * @param {Object} props.task - Données de la tâche
  * @param {number} props.index - Index pour le Draggable
  * @param {function} props.onDeleteClick - Handler pour l'action de suppression
+ * @param {function} props.onAssignmentUpdate - Handler appelé après mise à jour des assignés
  */
-function DraggableTaskItem({ task, index, onDeleteClick }) {
+function DraggableTaskItem({ task, index, onDeleteClick, onAssignmentUpdate }) {
   const itemRef = useRef(null);
   const [showSuccessDrop, setShowSuccessDrop] = useState(false);
+  const [showAssignModal, setShowAssignModal] = useState(false);
   const { pendingUpdates, isDragging } = useDragDrop();
+  
+  // Hook personnalisé pour gérer les assignations
+  const { 
+    assignees, 
+    fetchAssignees, 
+    assignUsersToTask, 
+    removeUserFromTask 
+  } = useTaskAssignment();
+  
+  // Charge les assignés au montage du composant
+  useEffect(() => {
+    if (task?.id) {
+      fetchAssignees(task.id);
+    }
+  }, [task?.id, fetchAssignees]);
   
   // Vérifier si la tâche est en cours de mise à jour
   const isUpdating = pendingUpdates[task.id]?.status === 'pending';
@@ -125,6 +145,33 @@ function DraggableTaskItem({ task, index, onDeleteClick }) {
             </div>
           </div>
           
+          {/* Section des assignés */}
+          <div className={styles.assigneesSection}>
+            <div className={styles.assigneesHeader}>
+              <AssigneesList 
+                assignees={assignees} 
+                compact={true} 
+                maxDisplay={3}
+              />
+              
+              <button 
+                className={styles.assignButton}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowAssignModal(true);
+                }}
+                title="Gérer les assignés"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="8.5" cy="7" r="4"></circle>
+                  <line x1="20" y1="8" x2="20" y2="14"></line>
+                  <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+          
           <div className={styles.taskActions}>
             <Link to={`/tasks/edit/${task.id}`} className={styles.editButton} onClick={e => e.stopPropagation()}>
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -171,6 +218,21 @@ function DraggableTaskItem({ task, index, onDeleteClick }) {
               </svg>
               <span>Mise à jour du statut...</span>
             </div>
+          )}
+          
+          {/* Modal d'assignation */}
+          {showAssignModal && (
+            <UserSelectionModal
+              show={showAssignModal}
+              onClose={() => setShowAssignModal(false)}
+              selectedUsers={assignees}
+              onSelectUsers={(selectedUsers) => {
+                const userIds = selectedUsers.map(user => user.id);
+                assignUsersToTask(task.id, userIds).then(() => {
+                  if (onAssignmentUpdate) onAssignmentUpdate(task.id);
+                });
+              }}
+            />
           )}
         </div>
       )}

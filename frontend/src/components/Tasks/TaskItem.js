@@ -1,18 +1,39 @@
 // --- fichier: frontend/src/components/Tasks/TaskItem.js ---
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './TaskItem.module.css';
+import AssigneesList from '../Users/AssigneesList';
+import UserSelectionModal from '../Users/UserSelectionModal';
+import useTaskAssignment from '../../hooks/useTaskAssignment';
 
 /**
  * Composant représentant un élément de tâche dans la liste
  * @param {Object} props - Les propriétés du composant
  * @param {Object} props.task - Données de la tâche
  * @param {function} props.onDeleteClick - Handler pour l'action de suppression
+ * @param {function} props.onAssignmentUpdate - Handler appelé après une mise à jour des assignés
  */
-function TaskItem({ task, onDeleteClick }) {
-  // État pour l'animation de disparition
+function TaskItem({ task, onDeleteClick, onAssignmentUpdate }) {
+  // États pour l'UI et les interactions
   const [isRemoving, setIsRemoving] = useState(false);
+  const [showAssignModal, setShowAssignModal] = useState(false);
   const itemRef = useRef(null);
+  
+  // Hook personnalisé pour gérer les assignations
+  const { 
+    assignees, 
+    isLoading: assignLoading, 
+    fetchAssignees, 
+    assignUsersToTask, 
+    removeUserFromTask 
+  } = useTaskAssignment();
+  
+  // Charge les assignés au montage du composant
+  useEffect(() => {
+    if (task?.id) {
+      fetchAssignees(task.id);
+    }
+  }, [task?.id, fetchAssignees]);
   
   // Gère le clic sur le bouton de suppression avec animation
   const handleDeleteClick = () => {
@@ -101,6 +122,36 @@ function TaskItem({ task, onDeleteClick }) {
         </div>
       </div>
       
+      {/* Section des assignés */}
+      <div className={styles.assigneesSection}>
+        <div className={styles.assigneesHeader}>
+          <h4>Assignés</h4>
+          <button 
+            className={styles.assignButton}
+            onClick={() => setShowAssignModal(true)}
+            title="Gérer les assignés"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <line x1="20" y1="8" x2="20" y2="14"></line>
+              <line x1="23" y1="11" x2="17" y2="11"></line>
+            </svg>
+          </button>
+        </div>
+        
+        <AssigneesList 
+          assignees={assignees} 
+          onRemove={(userId) => {
+            removeUserFromTask(task.id, userId).then(() => {
+              if (onAssignmentUpdate) onAssignmentUpdate(task.id);
+            });
+          }}
+          compact={true} 
+          maxDisplay={3}
+        />
+      </div>
+      
       <div className={styles.taskActions}>
         <Link to={`/tasks/edit/${task.id}`} className={styles.editButton}>
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -124,6 +175,19 @@ function TaskItem({ task, onDeleteClick }) {
           <span>Supprimer</span>
         </button>
       </div>
+      
+      {/* Modal de sélection d'utilisateurs */}
+      <UserSelectionModal
+        show={showAssignModal}
+        onClose={() => setShowAssignModal(false)}
+        selectedUsers={assignees}
+        onSelectUsers={(selectedUsers) => {
+          const userIds = selectedUsers.map(user => user.id);
+          assignUsersToTask(task.id, userIds).then(() => {
+            if (onAssignmentUpdate) onAssignmentUpdate(task.id);
+          });
+        }}
+      />
     </div>
   );
 }

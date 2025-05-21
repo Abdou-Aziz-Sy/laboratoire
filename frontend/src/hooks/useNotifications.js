@@ -3,6 +3,14 @@ import { useState, useCallback } from 'react';
 import { useToast } from '../context/ToastContext';
 import { handleApiError, getSuccessMessage } from '../utils/errorHandler';
 
+// Types de notifications pour l'assignation de tâches
+export const NOTIFICATION_TYPES = {
+  TASK_ASSIGNED: 'TASK_ASSIGNED',
+  TASK_UNASSIGNED: 'TASK_UNASSIGNED',
+  ASSIGNMENT_FAILED: 'ASSIGNMENT_FAILED',
+  ASSIGNMENT_UPDATED: 'ASSIGNMENT_UPDATED'
+};
+
 /**
  * Hook personnalisu00e9 pour gu00e9rer les notifications et les erreurs
  * Facilite l'utilisation du systu00e8me de toast et la gestion des erreurs
@@ -68,10 +76,10 @@ const useNotifications = () => {
   }, []);
 
   /**
-   * Notification de succu00e8s standardisu00e9e pour les actions CRUD
+   * Notification de succès standardisée pour les actions CRUD
    * @param {string} actionType - Type d'action (create, update, delete, etc.)
-   * @param {string} itemType - Type d'u00e9lu00e9ment concernu00e9 (tu00e2che, projet, etc.)
-   * @param {string} itemName - Nom ou identifiant de l'u00e9lu00e9ment (optionnel)
+   * @param {string} itemType - Type d'élément concerné (tâche, projet, etc.)
+   * @param {string} itemName - Nom ou identifiant de l'élément (optionnel)
    */
   const notifySuccess = useCallback((actionType, itemType, itemName) => {
     const message = getSuccessMessage(actionType, itemType, itemName);
@@ -79,12 +87,52 @@ const useNotifications = () => {
   }, [showSuccess]);
 
   /**
-   * Exu00e9cute une fonction asynchrone avec gestion d'u00e9tat de chargement et d'erreurs
-   * @param {Function} asyncFunction - Fonction asynchrone u00e0 exu00e9cuter
+   * Notification spécifique pour l'assignation de tâches
+   * @param {string} notificationType - Type de notification d'assignation
+   * @param {Object} data - Données supplémentaires (nom de la tâche, utilisateurs, etc.)
+   */
+  const notifyAssignment = useCallback((notificationType, data = {}) => {
+    const { taskTitle, userCount, userName } = data;
+    let message = '';
+    
+    switch (notificationType) {
+      case NOTIFICATION_TYPES.TASK_ASSIGNED:
+        message = userCount > 1
+          ? `${userCount} utilisateurs assignés à la tâche ${taskTitle || ''}`
+          : `${userName || 'Utilisateur'} assigné à la tâche ${taskTitle || ''}`;
+        showSuccess(message);
+        break;
+      
+      case NOTIFICATION_TYPES.TASK_UNASSIGNED:
+        message = `${userName || 'Utilisateur'} retiré de la tâche ${taskTitle || ''}`;
+        showInfo(message);
+        break;
+      
+      case NOTIFICATION_TYPES.ASSIGNMENT_UPDATED:
+        message = `Assignation de la tâche ${taskTitle || ''} mise à jour`;
+        showSuccess(message);
+        break;
+      
+      case NOTIFICATION_TYPES.ASSIGNMENT_FAILED:
+        message = `Échec de l'assignation de la tâche ${taskTitle || ''}${data.reason ? `: ${data.reason}` : ''}`;
+        showError(message);
+        break;
+      
+      default:
+        message = data.message || 'Opération d\'assignation effectuée';
+        showInfo(message);
+    }
+    
+    return message;
+  }, [showSuccess, showInfo, showError]);
+
+  /**
+   * Exécute une fonction asynchrone avec gestion d'état de chargement et d'erreurs
+   * @param {Function} asyncFunction - Fonction asynchrone à exécuter
    * @param {Object} options - Options
-   * @param {string} options.successMessage - Message de succu00e8s u00e0 afficher
+   * @param {string} options.successMessage - Message de succès à afficher
    * @param {boolean} options.showLoadingToast - Afficher ou non un toast durant le chargement
-   * @returns {Promise} - Ru00e9sultat de la fonction asynchrone
+   * @returns {Promise} - Résultat de la fonction asynchrone
    */
   const withAsyncNotification = useCallback(async (asyncFunction, options = {}) => {
     const { successMessage, showLoadingToast = false, onSuccess, onError } = options;
@@ -92,7 +140,7 @@ const useNotifications = () => {
     clearError();
     
     if (showLoadingToast) {
-      toast.info('Traitement en cours...', 0); // Duru00e9e 0 = reste jusqu'u00e0 u00eatre enlevu00e9 manuellement
+      toast.info('Traitement en cours...', 0); // Durée 0 = reste jusqu'à être enlevé manuellement
     }
     
     try {
@@ -116,27 +164,28 @@ const useNotifications = () => {
       }
       
       setLoading(false);
-      throw errorInfo; // Re-throw pour permettre une gestion externe si nu00e9cessaire
+      throw errorInfo; // Re-throw pour permettre une gestion externe si nécessaire
     }
   }, [toast, showSuccess, handleError, clearError]);
 
   return {
-    // u00c9tats
+    // États
     error,
     loading,
     
-    // Mu00e9thodes de notification
+    // Méthodes de notification
     showSuccess,
     showError,
     showInfo,
     showWarning,
     notifySuccess,
+    notifyAssignment,
     
     // Gestion des erreurs
     handleError,
     clearError,
     
-    // Utilitaire pour opu00e9rations asynchrones
+    // Utilitaire pour opérations asynchrones
     withAsyncNotification
   };
 };

@@ -4,7 +4,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import TaskForm from '../components/Tasks/TaskForm';
 import ProtectedNavbar from '../components/common/ProtectedNavbar';
 import WaveBackground from '../components/UI/WaveBackground';
-import { getTaskById } from '../api/taskService';
+import { getTaskById, getTaskAssignees } from '../api/taskService';
+import AssigneesList from '../components/Users/AssigneesList';
+import UserSelectionModal from '../components/Users/UserSelectionModal';
+import useTaskAssignment from '../hooks/useTaskAssignment';
+import AssignmentNotification from '../components/Notifications/AssignmentNotification';
 import { useToast } from '../context/ToastContext';
 import styles from './EditTaskPage.module.css';
 
@@ -19,6 +23,19 @@ const EditTaskPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isLoadingDone, setIsLoadingDone] = useState(false);
+  
+  // États pour gérer l'assignation
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [assignmentNotification, setAssignmentNotification] = useState(null);
+  
+  // Hook personnalisé pour la gestion des assignations
+  const { 
+    assignees, 
+    isLoading: assignLoading, 
+    fetchAssignees, 
+    assignUsersToTask, 
+    removeUserFromTask 
+  } = useTaskAssignment();
 
   // Effet pour charger les données de la tâche au montage du composant
   useEffect(() => {
@@ -30,6 +47,9 @@ const EditTaskPage = () => {
         // Appel API pour récupérer les données de la tâche
         const taskData = await getTaskById(taskId);
         setTask(taskData);
+        
+        // Charger les assignés de la tâche
+        fetchAssignees(taskId);
         
         // Ajouter un léger délai pour montrer l'animation de succès du chargement
         setTimeout(() => {
@@ -47,7 +67,7 @@ const EditTaskPage = () => {
     };
 
     fetchTaskData();
-  }, [taskId, showError]);
+  }, [taskId, showError, fetchAssignees]);
 
   // Gestionnaire de réussite après édition
   const handleEditSuccess = (updatedTask) => {
@@ -60,6 +80,44 @@ const EditTaskPage = () => {
       navigate('/tasks');
     }, 1500);
   };
+  
+  // Gestion de l'assignation de la tâche
+  const handleAssignment = (selectedUsers) => {
+    const userIds = selectedUsers.map(user => user.id);
+    assignUsersToTask(taskId, userIds).then((result) => {
+      // Afficher une notification d'assignation
+      setAssignmentNotification({
+        taskId,
+        assignees: selectedUsers,
+        action: 'assign',
+        timestamp: new Date()
+      });
+      
+      setTimeout(() => {
+        setAssignmentNotification(null);
+      }, 5000); // Masquer la notification après 5 secondes
+    });
+  };
+  
+  // Gestion de la suppression d'un assigné
+  const handleRemoveAssignee = (userId) => {
+    const removedUser = assignees.find(user => user.id === userId);
+    removeUserFromTask(taskId, userId).then(() => {
+      // Afficher une notification de désassignation
+      if (removedUser) {
+        setAssignmentNotification({
+          taskId,
+          assignees: [removedUser],
+          action: 'remove',
+          timestamp: new Date()
+        });
+        
+        setTimeout(() => {
+          setAssignmentNotification(null);
+        }, 5000); // Masquer la notification après 5 secondes
+      }
+    });
+  };
 
   return (
     <div className={styles.editTaskPage}>
@@ -71,6 +129,25 @@ const EditTaskPage = () => {
       
       <div className={styles.container}>
         <div className={styles.editTaskSection}>
+          
+          {/* Modal de sélection d'utilisateurs */}
+          <UserSelectionModal
+            show={showAssignModal}
+            onClose={() => setShowAssignModal(false)}
+            selectedUsers={assignees}
+            onSelectUsers={handleAssignment}
+          />
+          
+          {/* Notification d'assignation */}
+          {assignmentNotification && (
+            <AssignmentNotification
+              taskId={assignmentNotification.taskId}
+              assignees={assignmentNotification.assignees}
+              action={assignmentNotification.action}
+              timestamp={assignmentNotification.timestamp}
+              onClose={() => setAssignmentNotification(null)}
+            />
+          )}
           <div className={styles.headerContent}>
             <h1 className={styles.pageTitle}>Modifier la tâche</h1>
             <p className={styles.pageDescription}>
@@ -115,12 +192,50 @@ const EditTaskPage = () => {
             {/* Affichage du formulaire quand les données sont chargées */}
             {!isLoading && !error && task && (
               <div className={styles.fadeIn}>
-                <TaskForm 
-                  initialData={task}
-                  isEditMode={true}
-                  taskId={taskId}
-                  onSuccess={handleEditSuccess}
-                />
+                <div className={styles.formSection}>
+                  <TaskForm 
+                    initialData={task}
+                    isEditMode={true}
+                    taskId={taskId}
+                    onSuccess={handleEditSuccess}
+                  />
+                  
+                  {/* Section des assignations */}
+                  <div className={styles.assignmentSection}>
+                    <div className={styles.sectionHeader}>
+                      <h2>Assignation de la tâche</h2>
+                      <button 
+                        className={styles.assignButton}
+                        onClick={() => setShowAssignModal(true)}
+                        disabled={assignLoading}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                          <circle cx="8.5" cy="7" r="4"></circle>
+                          <line x1="20" y1="8" x2="20" y2="14"></line>
+                          <line x1="23" y1="11" x2="17" y2="11"></line>
+                        </svg>
+                        Gérer les assignés
+                      </button>
+                    </div>
+                    
+                    <div className={styles.assigneesContainer}>
+                      {assignLoading ? (
+                        <div className={styles.loadingAssignees}>
+                          <div className={styles.spinner}></div>
+                          <p>Chargement des assignés...</p>
+                        </div>
+                      ) : (
+                        <AssigneesList 
+                          assignees={assignees} 
+                          onRemove={handleRemoveAssignee} 
+                          maxDisplay={5}
+                          compact={false}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>
