@@ -1,28 +1,27 @@
-// --- fichier: frontend/src/pages/TaskListPage.js ---
+// --- fichier: frontend/src/pages/TaskStatusBoardPage.js ---
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { getTasks } from '../api/taskService';
-import TaskItem from '../components/Tasks/TaskItem';
+import { DragDropProvider } from '../context/DragDropContext';
+import TaskStatusBoard from '../components/Tasks/TaskStatusBoard';
 import DeleteTaskModal from '../components/Tasks/DeleteTaskModal';
-import TaskStats from '../components/Tasks/TaskStats';
 import { useToast } from '../context/ToastContext';
-import styles from './TaskListPage.module.css';
+import { getTasks } from '../api/taskService';
+import styles from './TaskStatusBoardPage.module.css';
+import WaveBackground from '../components/UI/WaveBackground';
 
 /**
- * Page d'affichage de la liste des tâches de l'utilisateur
- * Permet la visualisation, l'accès aux détails et la suppression des tâches
+ * Page d'affichage des tâches organisées par statut avec fonctionnalité drag & drop
  */
-function TaskListPage() {
+function TaskStatusBoardPage() {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, task: null });
-  const [statsRefreshTrigger, setStatsRefreshTrigger] = useState(0); // Déclencheur de rafraîchissement des statistiques
   const { showToast } = useToast();
 
   // Mémorisation de la fonction loadTasks pour éviter les re-renders inutiles
   const loadTasks = useCallback(async () => {
-    console.log('Chargement des tâches...');
+    console.log('Chargement des tâches pour le board de statuts...');
     setIsLoading(true);
     setError(null);
     try {
@@ -67,56 +66,44 @@ function TaskListPage() {
       currentTasks.filter(task => task.id !== deletedTaskId)
     );
     
-    // Ajouter une animation à la liste pour indiquer le changement
-    const taskListElement = document.querySelector(`.${styles.tasksList}`);
-    if (taskListElement) {
-      taskListElement.classList.add(styles.updateAnimation);
-      setTimeout(() => {
-        taskListElement.classList.remove(styles.updateAnimation);
-      }, 500);
-    }
+    showToast({
+      type: 'success',
+      message: 'La tâche a été supprimée avec succès'
+    });
+  };
 
-    // Rafraîchir les statistiques en incrémentant le déclencheur
-    setStatsRefreshTrigger(prev => prev + 1);
-
-    // Afficher un message de succès supplémentaire si la liste est désormais vide
-    if (tasks.length === 1) {
-      setTimeout(() => {
-        showToast({
-          type: 'info',
-          message: 'Bravo ! Vous avez terminé toutes vos tâches. Voulez-vous en créer une nouvelle ?',
-          duration: 6000 // Durée plus longue pour ce message important
-        });
-        
-        // Mettre en évidence le bouton de création après un court délai
-        setTimeout(() => {
-          const createButton = document.querySelector(`.${styles.createButton}`);
-          if (createButton) {
-            createButton.classList.add(styles.highlight);
-            // Retirer l'effet de mise en évidence après un certain temps
-            setTimeout(() => {
-              createButton.classList.remove(styles.highlight);
-            }, 2000);
-          }
-        }, 1000);
-      }, 1000);
-    }
+  // Fonction pour gérer le changement de statut d'une tâche
+  const handleTaskStatusChange = (updatedTask) => {
+    setTasks(currentTasks => 
+      currentTasks.map(task => 
+        task.id === updatedTask.id ? updatedTask : task
+      )
+    );
   };
 
   return (
-    <div className={styles.taskListContainer}>
+    <div className={styles.boardPageContainer}>
+      <WaveBackground />
+      
       <div className={styles.pageHeader}>
-        <h1 className={styles.pageTitle}>Mes Tâches</h1>
+        <div className={styles.titleContainer}>
+          <h1 className={styles.pageTitle}>Tableau des Tâches</h1>
+          <p className={styles.pageDescription}>Organisez vos tâches en les glissant-déposant entre les statuts</p>
+        </div>
+        
         <div className={styles.actionButtons}>
-          <Link to="/tasks/board" className={styles.boardViewButton}>
+          <Link to="/tasks" className={styles.listViewButton}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="3" width="7" height="7"></rect>
-              <rect x="14" y="3" width="7" height="7"></rect>
-              <rect x="14" y="14" width="7" height="7"></rect>
-              <rect x="3" y="14" width="7" height="7"></rect>
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
             </svg>
-            Vue Tableau
+            Vue Liste
           </Link>
+          
           <Link to="/tasks/create" className={styles.createButton}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -126,11 +113,6 @@ function TaskListPage() {
           </Link>
         </div>
       </div>
-
-      {/* Composant de statistiques qui se rafraîchit automatiquement après suppression */}
-      {!isLoading && !error && tasks.length > 0 && (
-        <TaskStats refreshTrigger={statsRefreshTrigger} />
-      )}
 
       {isLoading ? (
         <div className={styles.loadingContainer}>
@@ -165,17 +147,15 @@ function TaskListPage() {
           </Link>
         </div>
       ) : (
-        <div className={styles.tasksList}>
-          {tasks.map(task => (
-            <TaskItem 
-              key={task.id} 
-              task={task} 
-              onDeleteClick={openDeleteModal}
-            />
-          ))}
-        </div>
+        <DragDropProvider>
+          <TaskStatusBoard 
+            tasks={tasks} 
+            onTaskStatusChange={handleTaskStatusChange}
+            onDeleteClick={openDeleteModal}
+          />
+        </DragDropProvider>
       )}
-
+      
       {/* Modal de confirmation de suppression */}
       {deleteModal.isOpen && deleteModal.task && (
         <DeleteTaskModal
@@ -190,4 +170,4 @@ function TaskListPage() {
   );
 }
 
-export default TaskListPage;
+export default TaskStatusBoardPage;

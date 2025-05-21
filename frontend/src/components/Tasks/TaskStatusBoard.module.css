@@ -1,0 +1,73 @@
+/* --- fichier: frontend/src/components/Tasks/TaskStatusBoard.module.css --- */
+.taskBoardContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: calc(100vh - 180px);
+}
+
+.statusColumns {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  /* Style pour la scrollbar horizontale */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(253, 126, 20, 0.6) rgba(30, 30, 45, 0.3);
+}
+
+.statusColumns::-webkit-scrollbar {
+  height: 8px;
+}
+
+.statusColumns::-webkit-scrollbar-track {
+  background: rgba(30, 30, 45, 0.3);
+  border-radius: 10px;
+}
+
+.statusColumns::-webkit-scrollbar-thumb {
+  background-color: rgba(253, 126, 20, 0.6);
+  border-radius: 10px;
+}
+
+/* Styles pour l'animation des tâches qui changent de statut */
+.taskTransition {
+  transition: all 0.5s ease;
+}
+
+@keyframes highlightNew {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.newTask {
+  animation: highlightNew 0.5s ease-out forwards;
+}
+
+/* Responsive styling */
+@media (max-width: 1200px) {
+  .taskBoardContainer {
+    padding: 15px;
+    height: calc(100vh - 160px);
+  }
+}
+
+@media (max-width: 768px) {
+  .taskBoardContainer {
+    height: auto;
+    padding: 10px;
+  }
+  
+  .statusColumns {
+    flex-direction: column;
+    height: auto;
+    overflow-x: visible;
+  }
+}

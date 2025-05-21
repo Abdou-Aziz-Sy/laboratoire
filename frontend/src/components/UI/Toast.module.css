@@ -1,0 +1,146 @@
+/* --- fichier: frontend/src/components/UI/Toast.module.css --- */
+
+.toast {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 380px;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(30, 30, 45, 0.95), rgba(15, 15, 25, 0.98));
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  border-left: 4px solid;
+  transform: translateX(100%);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.toast::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  animation: timerBar linear forwards;
+  animation-duration: inherit;
+}
+
+.visible {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.leaving {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.iconContainer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-right: 12px;
+  border-radius: 50%;
+}
+
+.messageContainer {
+  flex-grow: 1;
+  color: white;
+}
+
+.message {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  margin-left: 8px;
+}
+
+.closeButton:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Types de toast */
+.success {
+  border-left-color: #2ecc71;
+}
+
+.success .iconContainer {
+  color: #2ecc71;
+}
+
+.success::after {
+  background-color: #2ecc71;
+}
+
+.error {
+  border-left-color: #e74c3c;
+}
+
+.error .iconContainer {
+  color: #e74c3c;
+}
+
+.error::after {
+  background-color: #e74c3c;
+}
+
+.info {
+  border-left-color: #3498db;
+}
+
+.info .iconContainer {
+  color: #3498db;
+}
+
+.info::after {
+  background-color: #3498db;
+}
+
+.warning {
+  border-left-color: rgba(253, 126, 20, 0.9);
+}
+
+.warning .iconContainer {
+  color: rgba(253, 126, 20, 0.9);
+}
+
+.warning::after {
+  background-color: rgba(253, 126, 20, 0.9);
+}
+
+/* Animation de la barre de timer */
+@keyframes timerBar {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .toast {
+    max-width: 95%;
+    width: 95%;
+    padding: 12px;
+  }
+}

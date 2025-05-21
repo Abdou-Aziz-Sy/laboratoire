@@ -144,18 +144,42 @@ export const updateTask = async (taskId, updatedData) => {
  * Change le statut d'une tâche.
  * @param {string} taskId - L'ID de la tâche à mettre à jour.
  * @param {string} newStatus - Le nouveau statut (ex: 'EN_COURS', 'TERMINEE').
- * @returns {Promise<object>} La tâche mise à jour.
+ * @param {boolean} [silentErrors=false] - Si true, retourne un objet avec {success: false, error} au lieu de lancer une erreur.
+ * @returns {Promise<object>} La tâche mise à jour ou un objet d'erreur {success: false, error, originalTask}.
  */
-export const updateTaskStatus = async (taskId, newStatus) => {
+export const updateTaskStatus = async (taskId, newStatus, silentErrors = false) => {
     try {
+        const startTime = performance.now();
+        
         const response = await fetchWithAuthTask(`${BASE_URL}/${taskId}/status`, {
             method: 'PATCH',
             body: JSON.stringify({ status: newStatus }),
         });
-        console.log(`Statut de la tâche ${taskId} mis à jour avec succès:`, response);
+        
+        const endTime = performance.now();
+        console.log(`Statut de la tâche ${taskId} mis à jour avec succès en ${Math.round(endTime - startTime)}ms:`, response);
+        
+        // Validation supplémentaire pour s'assurer que la réponse contient bien une tâche valide
+        if (!response || !response.id) {
+            const validationError = new Error('Réponse du serveur invalide après mise à jour du statut');
+            if (silentErrors) {
+                return { success: false, error: validationError };
+            }
+            throw validationError;
+        }
+        
         return response;
     } catch (error) {
         console.error(`Erreur lors de la mise à jour du statut de la tâche ${taskId}:`, error);
+        
+        if (silentErrors) {
+            return { 
+                success: false, 
+                error: error,
+                message: error.message || 'Erreur lors de la mise à jour du statut'
+            };
+        }
+        
         throw error;
     }
 };

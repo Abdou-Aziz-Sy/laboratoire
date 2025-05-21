@@ -194,3 +194,17 @@
     grid-template-columns: 1fr;
   }
 }
+/* --- Ajout dans frontend/src/components/Tasks/TaskStatusBoard.module.css --- */
+
+.taskMoving {
+  transition: transform 0.5s ease-out;
+}
+
+@keyframes statusChangeAnimation {
+  0% { transform: translateY(-20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.newTaskInColumn {
+  animation: statusChangeAnimation 0.5s ease-out forwards;
+}
