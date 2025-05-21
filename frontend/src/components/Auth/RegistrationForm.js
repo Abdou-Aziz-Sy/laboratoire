@@ -1,8 +1,7 @@
 // --- fichier: frontend/src/components/Auth/RegistrationForm.js ---
-import React, { useCallback, useMemo, useState } from 'react'; // Ajout de useCallback et useMemo
+import React, { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../../api/authService';
-import { Button } from '../common/Button';
 import { InputField } from '../common/InputField';
 import styles from './RegistrationForm.module.css';
 
@@ -16,7 +15,7 @@ function RegistrationForm() {
     confirmPassword: '',
   });
   const [validationErrors, setValidationErrors] = useState({});
-  const [touchedFields, setTouchedFields] = useState({}); // Garder une trace des champs touchés
+  const [touchedFields, setTouchedFields] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState(null);
 
@@ -45,7 +44,7 @@ function RegistrationForm() {
         error = 'Les mots de passe ne correspondent pas.';
     }
     return error;
-  }, []); // useCallback car les fonctions validateEmail/Password ne changent pas
+  }, []);
 
   // --- Gestionnaires d'Événements ---
 
@@ -87,21 +86,23 @@ function RegistrationForm() {
 
   // --- Calcul de la validité (mémoïsé pour l'optimisation) ---
   const isFormValid = useMemo(() => {
-      // Vérifie que tous les champs sont remplis
+      // Vérifie que tous les champs requis sont remplis
       const allFilled = Object.values(formData).every(value => value && String(value).trim() !== '');
       if (!allFilled) return false;
 
       // Vérifie qu'il n'y a pas d'erreurs de validation actives
-      const noErrors = Object.values(validationErrors).every(error => !error); // !error signifie null ou undefined
+      // Note: si validationErrors est vide (objet {}), on considère le formulaire valide
+      const errors = Object.values(validationErrors);
+      const noErrors = errors.length === 0 || errors.every(error => !error);
 
-      // Vérification finale (redondante mais sûre) de la logique métier
+      // Vérification finale de la logique métier
       const passwordMatch = formData.password === formData.confirmPassword;
       const emailOk = validateEmail(formData.email);
       const passwordOk = validatePassword(formData.password);
 
       return noErrors && passwordMatch && emailOk && passwordOk;
 
-  }, [formData, validationErrors]); // Recalculé seulement si formData ou validationErrors change
+  }, [formData, validationErrors]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -139,88 +140,109 @@ function RegistrationForm() {
 
   return (
     <form onSubmit={handleSubmit} className={styles.registrationForm} noValidate>
-      <h2>Créer un compte</h2>
+      <h2 className={styles.formTitle}>Créer un compte</h2>
 
       {apiError && <div className={styles.apiError}>{apiError}</div>}
 
-      <InputField
-        label="Prénom"
-        type="text"
-        name="firstName"
-        id="firstName"
-        value={formData.firstName}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        placeholder="Entrez votre prénom"
-        error={touchedFields.firstName ? validationErrors.firstName : null} // Affiche erreur seulement si touché
-        required
-      />
+      <div className={styles.inputRow}>
+        <div className={styles.inputGroup}>
+          <InputField
+            label="Prénom"
+            type="text"
+            name="firstName"
+            id="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Entrez votre prénom"
+            error={touchedFields.firstName ? validationErrors.firstName : null}
+            required
+            className={styles.formInput}
+          />
+        </div>
+        
+        <div className={styles.inputGroup}>
+          <InputField
+            label="Nom"
+            type="text"
+            name="lastName"
+            id="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Entrez votre nom"
+            error={touchedFields.lastName ? validationErrors.lastName : null}
+            required
+            className={styles.formInput}
+          />
+        </div>
+      </div>
 
-      <InputField
-        label="Nom"
-        type="text"
-        name="lastName"
-        id="lastName"
-        value={formData.lastName}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        placeholder="Entrez votre nom"
-        error={touchedFields.lastName ? validationErrors.lastName : null} // Affiche erreur seulement si touché
-        required
-      />
+      <div className={styles.inputGroup}>
+        <InputField
+          label="Adresse Email"
+          type="email"
+          name="email"
+          id="email"
+          value={formData.email}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          placeholder="exemple@domaine.com"
+          error={touchedFields.email ? validationErrors.email : null}
+          required
+          className={styles.formInput}
+        />
+      </div>
 
-      <InputField
-        label="Adresse Email"
-        type="email"
-        name="email"
-        id="email"
-        value={formData.email}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        placeholder="exemple@domaine.com"
-        error={touchedFields.email ? validationErrors.email : null}
-        required
-      />
+      <div className={styles.inputGroup}>
+        <InputField
+          label="Mot de passe"
+          type="password"
+          name="password"
+          id="password"
+          value={formData.password}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          placeholder="********"
+          error={touchedFields.password ? validationErrors.password : null}
+          required
+          className={styles.formInput}
+        />
+        {touchedFields.password && formData.password && !validatePassword(formData.password) && (
+          <p className={styles.passwordHint}>8+ caractères, 1 majuscule, 1 minuscule, 1 chiffre.</p>
+        )}
+      </div>
 
-      <InputField
-        label="Mot de passe"
-        type="password"
-        name="password"
-        id="password"
-        value={formData.password}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        placeholder="********"
-        error={touchedFields.password ? validationErrors.password : null}
-        required
-      />
-       {/* Affichage explicite de la règle de mdp si touché et invalide */}
-       {touchedFields.password && formData.password && !validatePassword(formData.password) && (
-         <p className={styles.passwordHint}>8+ caractères, 1 majuscule, 1 minuscule, 1 chiffre.</p>
-      )}
+      <div className={styles.inputGroup}>
+        <InputField
+          label="Confirmer le mot de passe"
+          type="password"
+          name="confirmPassword"
+          id="confirmPassword"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          placeholder="********"
+          error={touchedFields.confirmPassword ? validationErrors.confirmPassword : null}
+          required
+          className={styles.formInput}
+        />
+      </div>
 
-
-      <InputField
-        label="Confirmer le mot de passe"
-        type="password"
-        name="confirmPassword"
-        id="confirmPassword"
-        value={formData.confirmPassword}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        placeholder="********"
-        error={touchedFields.confirmPassword ? validationErrors.confirmPassword : null}
-        required
-      />
-
-      <Button
+      <button
         type="submit"
-        // La validité est maintenant calculée avec useMemo et ne cause pas de re-render ici
         disabled={isLoading || !isFormValid}
         className={styles.submitButton}
       >
-        {isLoading ? 'Inscription en cours...' : "S'inscrire"}
-      </Button>
+        {isLoading ? (
+          <div className={styles.loadingSpinner}>
+            <span className={styles.spinner}></span>
+            <span>Inscription en cours...</span>
+          </div>
+        ) : (
+          <span>S'inscrire</span>
+        )}
+      </button>
     </form>
   );
 }
