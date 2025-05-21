@@ -9,7 +9,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -26,6 +29,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+
+        // Liste des URLs qui ne nécessitent pas d'authentification
+        final List<String> allowedPaths = Arrays.asList(
+            "/api/users/register",
+            "/api/users/login",
+            "/api/users/forgot-password",
+            "/api/users/password/reset-request",
+            "/api/users/password/reset",
+            "/swagger-ui/",
+            "/v3/api-docs/"
+        );
+
+        // Vérifiez si l'URL actuelle est dans la liste des URLs permises
+        String path = request.getServletPath();
+        
+        // Pour gérer aussi les URLs qui commencent par ces chemins (comme /swagger-ui/index.html)
+        boolean isAllowedPath = allowedPaths.stream()
+                .anyMatch(allowedPath -> 
+                    path.equals(allowedPath) || 
+                    (allowedPath.endsWith("/") && path.startsWith(allowedPath)));
+                    
+        if (isAllowedPath) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String authHeader = request.getHeader("Authorization");
 
