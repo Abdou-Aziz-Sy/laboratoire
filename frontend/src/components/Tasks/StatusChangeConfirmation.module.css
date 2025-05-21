@@ -1,0 +1,169 @@
+/* --- fichier: frontend/src/components/Tasks/StatusChangeConfirmation.module.css --- */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease;
+}
+
+.modalContainer {
+  width: 90%;
+  max-width: 500px;
+  background: linear-gradient(135deg, rgba(30, 30, 45, 0.9), rgba(15, 15, 25, 0.95));
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  transform: translateY(0);
+  animation: slideIn 0.4s ease;
+  border: 1px solid rgba(253, 126, 20, 0.3);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modalHeader h3 {
+  margin: 0;
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.2s;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  color: rgba(253, 126, 20, 0.9);
+}
+
+.modalContent {
+  padding: 20px;
+  color: white;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.statusBadge {
+  background: rgba(253, 126, 20, 0.2);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: 500;
+  margin: 0 3px;
+  display: inline-block;
+  border: 1px solid rgba(253, 126, 20, 0.6);
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cancelButton, .confirmButton {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelButton {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.cancelButton:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.confirmButton {
+  background: linear-gradient(45deg, rgba(253, 126, 20, 0.8), rgba(253, 126, 20, 0.6));
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.confirmButton::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: rotate(30deg);
+  transition: transform 0.3s ease-out;
+  opacity: 0;
+}
+
+.confirmButton:hover::after {
+  opacity: 1;
+  transform: rotate(30deg) translate(50%, -50%);
+  transform: rotate(30deg) translate(50%, 50%);
+}
+
+.confirmButton:hover {
+  background: linear-gradient(135deg, rgba(253, 126, 20, 1), rgba(253, 126, 20, 0.8));
+  box-shadow: 0 0 10px rgba(253, 126, 20, 0.5);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive styling */
+@media (max-width: 640px) {
+  .modalContainer {
+    width: 95%;
+  }
+  
+  .modalHeader h3 {
+    font-size: 1.1rem;
+  }
+  
+  .modalContent {
+    padding: 15px;
+    font-size: 0.95rem;
+  }
+  
+  .modalActions {
+    padding: 12px 15px;
+  }
+}
