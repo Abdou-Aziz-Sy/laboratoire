@@ -14,6 +14,7 @@ import ResetPasswordPage from './pages/ResetPasswordPage';
 import FeaturesPage from './pages/FeaturesPage';
 import PricingPage from './pages/PricingPage'; // Ajout de l'import pour la page de tarification
 import ContactPage from './pages/ContactPage'; // Ajout de l'import pour la page de contact
+import CreateTaskPage from './pages/CreateTaskPage'; // Import de la page de création de tâche
 
 // Page temporaire pour les routes non encore implémentées
 const TemporaryPage = ({ pageName }) => (
@@ -46,9 +47,13 @@ function App() {
           <Route path="/pricing" element={<PricingPage />} /> {/* Route pour la page de tarification */}
           <Route path="/contact" element={<ContactPage />} /> {/* Nouvelle route pour la page de contact */}
           
+          {/* Routes protégées pour les tâches */}
+          <Route path="/create-task" element={<PrivateRoute element={<CreateTaskPage />} />} />
+          
           {/* Routes protégées temporaires */}
           <Route path="/dashboard" element={<PrivateRoute element={<TemporaryPage pageName="Tableau de bord" />} />} />
           <Route path="/profile" element={<PrivateRoute element={<TemporaryPage pageName="Profil" />} />} />
+          <Route path="/tasks" element={<PrivateRoute element={<TemporaryPage pageName="Mes tâches" />} />} />
           
           {/* Route 404 */}
           <Route path="*" element={<TemporaryPage pageName="404 - Page non trouvée" />} />
