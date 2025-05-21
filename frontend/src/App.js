@@ -12,6 +12,7 @@ import RegistrationPage from './pages/RegistrationPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import TaskListPage from './pages/TaskListPage';
+import TaskStatusBoardPage from './pages/TaskStatusBoardPage';
 import CreateTaskPage from './pages/CreateTaskPage';
 import EditTaskPage from './pages/EditTaskPage';
 import FeaturesPage from './pages/FeaturesPage';
@@ -52,6 +53,7 @@ function App() {
             
             {/* Routes protégées pour les tâches */}
             <Route path="/tasks" element={<PrivateRoute element={<TaskListPage />} />} />
+            <Route path="/tasks/board" element={<PrivateRoute element={<TaskStatusBoardPage />} />} />
             <Route path="/tasks/create" element={<PrivateRoute element={<CreateTaskPage />} />} />
             <Route path="/tasks/:taskId/edit" element={<PrivateRoute element={<EditTaskPage />} />} />
             
