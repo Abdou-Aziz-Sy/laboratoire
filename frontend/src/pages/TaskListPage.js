@@ -107,13 +107,24 @@ function TaskListPage() {
     <div className={styles.taskListContainer}>
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>Mes Tâches</h1>
-        <Link to="/tasks/create" className={styles.createButton}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-          Nouvelle Tâche
-        </Link>
+        <div className={styles.actionButtons}>
+          <Link to="/tasks/board" className={styles.boardViewButton}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Vue Tableau
+          </Link>
+          <Link to="/tasks/create" className={styles.createButton}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Nouvelle Tâche
+          </Link>
+        </div>
       </div>
 
       {/* Composant de statistiques qui se rafraîchit automatiquement après suppression */}
