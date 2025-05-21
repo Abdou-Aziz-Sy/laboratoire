@@ -14,8 +14,8 @@ Assurez-vous d'avoir installé sur votre machine :
 Clonez le dépôt GitHub sur votre machine :
 
 ```bash
-git clone https://github.com/noreyni03/taskmanager.git
-cd taskmanager
+git clone https://github.com/noreyni03/taskhandler.git
+cd taskhandler
 ```
 
 ### Configuration du Backend (Spring Boot)

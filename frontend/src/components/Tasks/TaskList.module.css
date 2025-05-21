@@ -1,0 +1,263 @@
+/* frontend/src/components/Tasks/TaskList.module.css */
+.taskListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.tableContainer {
+  overflow-x: auto;
+  border-radius: 8px;
+}
+
+.taskTable {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  min-width: 800px;
+}
+
+.taskTable th,
+.taskTable td {
+  padding: 1rem;
+  text-align: left;
+}
+
+.taskTable th {
+  background: rgba(30, 30, 70, 0.7);
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s, transform 0.1s;
+  user-select: none;
+  padding-right: 1.5rem; /* Espace pour l'icône de tri */
+}
+
+.taskTable th:hover {
+  background: rgba(40, 40, 90, 0.8);
+  transform: translateY(-1px);
+}
+
+.taskTable th:active {
+  transform: translateY(0);
+}
+
+.activeSortColumn {
+  background: rgba(50, 50, 100, 0.8) !important;
+  border-bottom: 2px solid rgba(253, 126, 20, 0.8);
+}
+
+.sortIcon {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.activeSortColumn .sortIcon {
+  opacity: 1;
+  color: rgba(253, 126, 20, 1);
+}
+
+/* Indicateur de colonne triable */
+.taskTable th::after {
+  content: '⇵';
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  opacity: 0.3;
+  transition: opacity 0.2s;
+}
+
+.taskTable th:hover::after {
+  opacity: 0.7;
+}
+
+.activeSortColumn::after {
+  display: none;
+}
+
+.taskTable tbody tr {
+  background: rgba(40, 40, 80, 0.5);
+  transition: background-color 0.2s;
+}
+
+.taskTable tbody tr:nth-child(even) {
+  background: rgba(50, 50, 100, 0.3);
+}
+
+.taskTable tbody tr:hover {
+  background: rgba(60, 60, 120, 0.6);
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  background: rgba(30, 30, 60, 0.3);
+  backdrop-filter: blur(4px);
+  border-radius: 8px;
+  gap: 1rem;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: rgba(253, 126, 20, 0.8);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background: rgba(100, 30, 30, 0.3);
+  backdrop-filter: blur(4px);
+  border-radius: 8px;
+  gap: 1rem;
+  text-align: center;
+}
+
+.errorIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background: rgba(220, 50, 50, 0.7);
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.errorMessage {
+  color: #f8d7da;
+  font-size: 1.1rem;
+}
+
+.retryButton {
+  margin-top: 1rem;
+  padding: 0.6rem 1.5rem;
+  background: linear-gradient(45deg, #ff5252, #ff7b7b);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.retryButton:hover {
+  background: linear-gradient(45deg, #ff6b6b, #ff8f8f);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 82, 82, 0.3);
+}
+
+.retryButton:active {
+  transform: translateY(0);
+}
+
+.emptyState {
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: rgba(30, 30, 60, 0.3);
+  border-radius: 8px;
+  gap: 1rem;
+}
+
+.emptyStateIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.emptyState h3 {
+  font-size: 1.5rem;
+  margin: 0;
+  color: #e0e0e0;
+}
+
+.emptyState p {
+  color: #b0b0b0;
+  max-width: 400px;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.resetFiltersButton {
+  padding: 0.6rem 1.5rem;
+  background: linear-gradient(45deg, rgba(253, 126, 20, 0.6), rgba(253, 126, 20, 0.8));
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.resetFiltersButton:hover {
+  background: linear-gradient(45deg, rgba(253, 126, 20, 0.8), rgba(253, 126, 20, 1));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(253, 126, 20, 0.3);
+}
+
+.resetFiltersButton:active {
+  transform: translateY(0);
+}
+
+/* Effet de brillance sur les boutons */
+.retryButton::after,
+.resetFiltersButton::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  pointer-events: none;
+  transition: transform 0.6s;
+}
+
+.retryButton:hover::after,
+.resetFiltersButton:hover::after {
+  transform: rotate(30deg) translate(50%, 50%);
+}
+
+@media (max-width: 768px) {
+  .loadingContainer,
+  .errorContainer,
+  .emptyState {
+    padding: 2rem 1rem;
+  }
+}
