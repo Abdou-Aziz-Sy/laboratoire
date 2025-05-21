@@ -1,0 +1,264 @@
+/* frontend/src/components/Tasks/TaskFilters.module.css */
+.filtersContainer {
+  background: rgba(30, 30, 60, 0.5);
+  backdrop-filter: blur(4px);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.basicSearch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.searchInputWrapper {
+  position: relative;
+  flex: 1;
+  max-width: 600px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  padding-right: 3rem;
+  border: none;
+  border-radius: 8px;
+  background: rgba(50, 50, 100, 0.3);
+  color: white;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.searchInput:focus {
+  outline: none;
+  background: rgba(60, 60, 120, 0.4);
+  box-shadow: 0 0 0 2px rgba(253, 126, 20, 0.3);
+}
+
+.searchInput::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.searchButton {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.2s;
+}
+
+.searchButton:hover {
+  color: rgba(253, 126, 20, 1);
+}
+
+.expandButton {
+  background: rgba(50, 50, 100, 0.3);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.9rem;
+  padding: 0.7rem 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.expandButton:hover {
+  background: rgba(60, 60, 120, 0.4);
+}
+
+.advancedFilters {
+  margin-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1.5rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+.filtersGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filterLabel {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.filterSelect,
+.filterInput {
+  padding: 0.7rem;
+  background: rgba(50, 50, 100, 0.3);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.filterSelect:focus,
+.filterInput:focus {
+  outline: none;
+  background: rgba(60, 60, 120, 0.4);
+  box-shadow: 0 0 0 2px rgba(253, 126, 20, 0.3);
+}
+
+.filterActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.applyButton,
+.resetButton {
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.applyButton {
+  background: linear-gradient(45deg, rgba(253, 126, 20, 0.6), rgba(253, 126, 20, 0.8));
+  color: white;
+}
+
+.applyButton:hover {
+  background: linear-gradient(45deg, rgba(253, 126, 20, 0.7), rgba(253, 126, 20, 0.9));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(253, 126, 20, 0.3);
+}
+
+.resetButton {
+  background: rgba(50, 50, 80, 0.5);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.resetButton:hover {
+  background: rgba(60, 60, 100, 0.6);
+  transform: translateY(-2px);
+}
+
+.applyButton:active,
+.resetButton:active {
+  transform: translateY(0);
+}
+
+/* Effet de brillance sur les boutons */
+.applyButton::after,
+.resetButton::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  pointer-events: none;
+  transition: transform 0.6s;
+}
+
+.applyButton:hover::after,
+.resetButton:hover::after {
+  transform: rotate(30deg) translate(50%, 50%);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .basicSearch {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filtersGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .filterActions {
+    flex-direction: column;
+  }
+}/* frontend/src/components/Tasks/TaskFilters.module.css */
+/* Ajoutez ces styles supplémentaires à votre fichier existant */
+
+.filterIndicators {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.filterBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(253, 126, 20, 0.3);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+  animation: pulseHighlight 2s infinite;
+}
+
+.filterBadgeIcon {
+  font-size: 1rem;
+}
+
+.activeExpandButton {
+  background: rgba(253, 126, 20, 0.4);
+}
+
+.applyButton:disabled,
+.resetButton:disabled,
+.searchButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+@keyframes pulseHighlight {
+  0% {
+    background: rgba(253, 126, 20, 0.3);
+  }
+  50% {
+    background: rgba(253, 126, 20, 0.5);
+  }
+  100% {
+    background: rgba(253, 126, 20, 0.3);
+  }
+}
