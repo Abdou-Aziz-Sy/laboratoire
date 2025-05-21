@@ -247,3 +247,109 @@
     font-size: 1.5rem;
   }
 }
+/* Ajouter dans TaskForm.module.css */
+
+.cancelButton {
+  padding: 0.75rem 1.5rem;
+  margin-top: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.cancelButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.cancelButton:active {
+  transform: scale(0.98);
+}
+
+/* Pour aligner les boutons côte à côte en mode édition */
+@media (min-width: 576px) {
+  .submitButton, .cancelButton {
+    width: calc(50% - 0.5rem);
+    display: inline-block;
+  }
+  
+  .submitButton {
+    margin-right: 1rem;
+  }
+}
+/* Ajouter à frontend/src/components/Tasks/TaskForm.module.css */
+
+/* Amélioration des animations existantes */
+.apiError {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+.successMessage {
+  animation: bounceIn 0.75s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+}
+
+/* Effet de pulsation pour le bouton de soumission */
+.submitButton:not(:disabled):hover {
+  animation: pulse 1.5s infinite;
+}
+
+/* Nouvelles animations */
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  20% {
+    transform: scale(1.1);
+  }
+  40% {
+    transform: scale(0.9);
+  }
+  60% {
+    transform: scale(1.03);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(0.97);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(253, 126, 20, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(253, 126, 20, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(253, 126, 20, 0);
+  }
+}

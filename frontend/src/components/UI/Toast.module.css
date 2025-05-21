@@ -1,0 +1,156 @@
+/* --- fichier: frontend/src/components/UI/Toast.module.css --- */
+.toast {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  min-height: 64px;
+  background: rgba(30, 30, 30, 0.85);
+  backdrop-filter: blur(10px);
+  color: white;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.toast::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+}
+
+.success {
+  border: 1px solid rgba(46, 213, 115, 0.2);
+}
+
+.success::before {
+  background: linear-gradient(to bottom, #2ed573, #7bed9f);
+}
+
+.error {
+  border: 1px solid rgba(255, 71, 87, 0.2);
+}
+
+.error::before {
+  background: linear-gradient(to bottom, #ff4757, #ff6b81);
+}
+
+.info {
+  border: 1px solid rgba(84, 160, 255, 0.2);
+}
+
+.info::before {
+  background: linear-gradient(to bottom, #54a0ff, #70a1ff);
+}
+
+.warning {
+  border: 1px solid rgba(255, 165, 2, 0.2);
+}
+
+.warning::before {
+  background: linear-gradient(to bottom, #ffa502, #ff9f43);
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.success .iconContainer {
+  background: rgba(46, 213, 115, 0.15);
+  color: #2ed573;
+}
+
+.error .iconContainer {
+  background: rgba(255, 71, 87, 0.15);
+  color: #ff4757;
+}
+
+.info .iconContainer {
+  background: rgba(84, 160, 255, 0.15);
+  color: #54a0ff;
+}
+
+.warning .iconContainer {
+  background: rgba(255, 165, 2, 0.15);
+  color: #ffa502;
+}
+
+.icon {
+  font-size: 1.1rem;
+}
+
+.content {
+  flex: 1;
+}
+
+.message {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Animations */
+.slideIn {
+  animation: slideInRight 0.4s ease-out forwards;
+}
+
+.slideOut {
+  animation: slideOutRight 0.4s ease-in forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
