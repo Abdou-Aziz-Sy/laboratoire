@@ -1,0 +1,277 @@
+/* --- fichier: frontend/src/components/Tasks/DraggableTaskItem.module.css --- */
+.taskItem {
+  background: linear-gradient(135deg, rgba(30, 30, 45, 0.8), rgba(15, 15, 25, 0.9));
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1.0);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: grab;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+  transform-origin: center center;
+}
+
+.taskItem:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  border-color: rgba(253, 126, 20, 0.3);
+}
+
+.isDragging {
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4) !important;
+  border-color: rgba(253, 126, 20, 0.8) !important;
+  opacity: 0.92;
+  transform: scale(1.05) rotate(1deg) !important;
+  z-index: 100;
+  animation: pulse-border 1.5s infinite;
+}
+
+.taskHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.taskTitle {
+  margin: 0 0 5px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  flex: 1;
+}
+
+.priorityBadge {
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: 500;
+  color: white;
+  opacity: 0.9;
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.highPriority {
+  background-color: rgba(247, 65, 65, 0.7);
+  border: 1px solid rgba(247, 65, 65, 0.4);
+}
+
+.mediumPriority {
+  background-color: rgba(255, 166, 0, 0.7);
+  border: 1px solid rgba(255, 166, 0, 0.4);
+}
+
+.lowPriority {
+  background-color: rgba(75, 192, 192, 0.7);
+  border: 1px solid rgba(75, 192, 192, 0.4);
+}
+
+.taskDescription {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.noDescription {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.taskMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.taskDate {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.taskDate svg {
+  color: rgba(253, 126, 20, 0.8);
+}
+
+.taskActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.editButton, .deleteButton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.editButton {
+  text-decoration: none;
+}
+
+.editButton:hover, .deleteButton:hover {
+  background: rgba(253, 126, 20, 0.2);
+  border-color: rgba(253, 126, 20, 0.4);
+}
+
+.deleteButton {
+  background: rgba(220, 53, 69, 0.1);
+  border: 1px solid rgba(220, 53, 69, 0.1);
+}
+
+.deleteButton:hover {
+  background: rgba(220, 53, 69, 0.2);
+  border-color: rgba(220, 53, 69, 0.3);
+}
+
+.dragIndicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(20, 20, 35, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  gap: 10px;
+  animation: pulse 1.5s infinite;
+  backdrop-filter: blur(2px);
+  z-index: 10;
+}
+
+.dragIndicator svg {
+  color: rgba(253, 126, 20, 0.9);
+  animation: rotate 3s linear infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 0.9; }
+  100% { opacity: 0.7; }
+}
+
+@keyframes pulse-border {
+  0% { box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(253, 126, 20, 0.8); }
+  50% { box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4), 0 0 0 3px rgba(253, 126, 20, 0.6); }
+  100% { box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(253, 126, 20, 0.8); }
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive styling */
+@media (max-width: 640px) {
+  .taskItem {
+    padding: 12px;
+  }
+  
+  .taskTitle {
+    font-size: 1rem;
+  }
+  
+  .priorityBadge {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+    min-width: 70px;
+  }
+  
+  .taskDescription {
+    font-size: 0.85rem;
+  }
+  
+  .taskActions {
+    flex-wrap: wrap;
+  }
+}
+/* --- Ajout dans frontend/src/components/Tasks/DraggableTaskItem.module.css --- */
+
+.updatingTask {
+  position: relative;
+  border: 1px dashed rgba(253, 126, 20, 0.8) !important;
+  box-shadow: 0 0 15px rgba(253, 126, 20, 0.3) !important;
+  animation: updating-pulse 1.5s infinite;
+}
+
+.updatingTask::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(253, 126, 20, 0.1);
+  pointer-events: none;
+  z-index: 1;
+  animation: pulse 1.5s infinite;
+}
+
+.updatingTask::after {
+  content: 'Mise à jour...';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  z-index: 2;
+}
+
+.errorUpdateTask {
+  border: 1px dashed rgba(255, 0, 0, 0.8) !important;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.3) !important;
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes updating-pulse {
+  0% { background-color: rgba(253, 126, 20, 0.0); }
+  50% { background-color: rgba(253, 126, 20, 0.1); }
+  100% { background-color: rgba(253, 126, 20, 0.0); }
+}
+
+@keyframes success-drop {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.successDrop {
+  animation: success-drop 0.5s forwards;
+  border: 1px solid rgba(75, 192, 192, 0.6) !important;
+  box-shadow: 0 0 15px rgba(75, 192, 192, 0.4) !important;
+}
+
+.animateTaskMove {
+  transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.0) !important;
+}
