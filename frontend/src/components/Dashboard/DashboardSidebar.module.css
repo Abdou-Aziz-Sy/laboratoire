@@ -1,0 +1,233 @@
+/* --- fichier: frontend/src/components/Dashboard/DashboardSidebar.module.css --- */
+
+.sidebar {
+  width: 250px;
+  height: 100%;
+  background-color: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease, transform 0.3s ease;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 50;
+}
+
+/* État replié de la sidebar */
+.sidebar.collapsed {
+  width: 70px;
+}
+
+/* Navigation */
+.navigation {
+  flex: 1;
+  padding: 1.5rem 0;
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.navItem {
+  width: 100%;
+  position: relative;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0.85rem 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.navLink:hover {
+  color: var(--white, #ffffff);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Style pour l'élément actif */
+.navLink.active {
+  color: var(--white, #ffffff);
+  background-color: rgba(253, 126, 20, 0.15);
+  position: relative;
+}
+
+.activeIndicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: rgba(253, 126, 20, 0.8);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.navLink.active .activeIndicator {
+  opacity: 1;
+}
+
+.navIcon {
+  min-width: 20px;
+  margin-right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  transition: margin-right 0.3s ease;
+}
+
+.navLabel {
+  white-space: nowrap;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 1;
+  transform: translateX(0);
+  position: relative;
+  z-index: 2;
+}
+
+/* Animation sur l'icône pour l'élément actif */
+.navLink.active .navIcon {
+  transform: scale(1.1);
+  color: rgba(253, 126, 20, 0.9);
+}
+
+/* Effet au survol */
+.navLink::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0) 100%);
+  transition: transform 0.6s ease;
+  z-index: 1;
+}
+
+.navLink:hover::before {
+  transform: translateX(100%);
+}
+
+/* Pied de la sidebar */
+.sidebarFooter {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.helpSection {
+  margin-bottom: 1rem;
+}
+
+.helpLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0.75rem 0;
+  transition: color 0.3s ease;
+}
+
+.helpLink:hover {
+  color: var(--white, #ffffff);
+}
+
+/* Adaptations quand la sidebar est repliée */
+.sidebar.collapsed .navLink {
+  padding: 0.85rem;
+  justify-content: center;
+}
+
+.sidebar.collapsed .navIcon {
+  margin-right: 0;
+}
+
+.sidebar.collapsed .navLabel {
+  opacity: 0;
+  transform: translateX(10px);
+  position: absolute;
+}
+
+.sidebar.collapsed .helpLink {
+  justify-content: center;
+  padding: 0.75rem 0;
+}
+
+/* Tooltip pour afficher le libellé quand la sidebar est repliée */
+.sidebar.collapsed .navLink:hover::after {
+  content: attr(aria-label);
+  position: absolute;
+  left: 65px;
+  background-color: rgba(30, 41, 59, 0.95);
+  color: var(--white, #ffffff);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.sidebar.collapsed .navLink:hover::before {
+  display: none;
+}
+
+/* Animation d'apparition pour les éléments de la sidebar */
+.navItem {
+  animation: fadeInRight 0.3s ease;
+  animation-fill-mode: both;
+}
+
+.navItem:nth-child(1) { animation-delay: 0.05s; }
+.navItem:nth-child(2) { animation-delay: 0.1s; }
+.navItem:nth-child(3) { animation-delay: 0.15s; }
+.navItem:nth-child(4) { animation-delay: 0.2s; }
+.navItem:nth-child(5) { animation-delay: 0.25s; }
+.navItem:nth-child(6) { animation-delay: 0.3s; }
+.navItem:nth-child(7) { animation-delay: 0.35s; }
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Media queries pour la responsivité */
+@media (max-width: 768px) {
+  .sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    transform: translateX(-100%);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .sidebar.collapsed {
+    transform: translateX(-100%);
+  }
+  
+  .sidebar:not(.collapsed) {
+    transform: translateX(0);
+    width: 250px;
+  }
+}
