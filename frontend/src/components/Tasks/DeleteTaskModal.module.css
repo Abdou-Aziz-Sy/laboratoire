@@ -1,0 +1,262 @@
+/* --- fichier: frontend/src/components/Tasks/DeleteTaskModal.module.css --- */
+
+/* Style pour l'overlay du modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+/* Style pour le contenu du modal */
+.modalContent {
+  background: linear-gradient(135deg, rgba(30, 30, 35, 0.9) 0%, rgba(15, 15, 20, 0.95) 100%);
+  width: 90%;
+  max-width: 500px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  color: var(--white, #ffffff);
+  overflow: hidden;
+  transform: scale(0.9);
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Animation d'entrée */
+.modalContent.visible {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* En-tête du modal */
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modalTitle {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--white, #ffffff);
+  position: relative;
+  display: inline-block;
+}
+
+.modalTitle::after {
+  content: '';
+  position: absolute;
+  width: 40%;
+  height: 3px;
+  bottom: -8px;
+  left: 0;
+  background-color: rgba(253, 126, 20, 0.6);
+  border-radius: 2px;
+}
+
+/* Bouton de fermeture */
+.closeButton {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.75rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: all 0.2s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.closeButton:hover {
+  color: var(--white, #ffffff);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Corps du modal */
+.modalBody {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.warningIcon {
+  color: rgba(253, 126, 20, 0.9);
+  margin-bottom: 1rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.confirmMessage {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+.taskTitle {
+  font-weight: 700;
+  color: rgba(253, 126, 20, 0.9);
+}
+
+.warningText {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.5rem;
+}
+
+/* Pied du modal avec boutons */
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Style général pour les boutons */
+.cancelButton,
+.deleteButton {
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Bouton Annuler */
+.cancelButton {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--white, #ffffff);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cancelButton:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Bouton Supprimer */
+.deleteButton {
+  background: linear-gradient(135deg, rgba(253, 76, 20, 0.8) 0%, rgba(220, 47, 2, 0.9) 100%);
+  color: white;
+}
+
+.deleteButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(253, 76, 20, 0.9) 0%, rgba(220, 47, 2, 1) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(220, 47, 2, 0.3);
+}
+
+/* Effet de brillance sur les boutons */
+.deleteButton::before,
+.cancelButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0) 0%, 
+    rgba(255, 255, 255, 0.4) 50%, 
+    rgba(255, 255, 255, 0) 100%);
+  transform: translateX(-100%);
+}
+
+.deleteButton:hover:not(:disabled)::before,
+.cancelButton:hover:not(:disabled)::before {
+  animation: buttonShine 1.5s infinite;
+}
+
+@keyframes buttonShine {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Style pour les boutons désactivés */
+.deleteButton:disabled,
+.cancelButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Loading spinner */
+.loadingSpinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Media queries pour l'adaptation mobile */
+@media (max-width: 600px) {
+  .modalContent {
+    width: 95%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
+  .modalFooter {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .cancelButton,
+  .deleteButton {
+    width: 100%;
+  }
+}

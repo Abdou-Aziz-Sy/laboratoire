@@ -1,84 +1,73 @@
-// --- fichier: frontend/src/App.js ---
+// React and related imports
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
-import RegistrationPage from './pages/RegistrationPage.js';
-import HomePage from './pages/HomePage.js';
-import LoginPage from './pages/LoginPage.js';
-import ForgotPasswordPage from './pages/ForgotPasswordPage.js';
-// --- AJOUTER L'IMPORT ---
-import ResetPasswordPage from './pages/ResetPasswordPage.js';
-
-import { ProtectedRoute } from './components/common/ProtectedRoute';
-import { useAuth } from './context/AuthContext';
-import { Button } from './components/common/Button';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ToastProvider } from './context/ToastContext';
+import { getAuthToken } from './api/authService';
 import './App.css';
 
-// Composant interne LogoutNavButton (inchangé)
-const LogoutNavButton = () => {
-  const { logoutContext } = useAuth();
-  const navigate = useNavigate();
-  const handleLogout = () => {
-    logoutContext();
-    navigate('/login');
-  };
-  return (
-    <Button onClick={handleLogout} variant="secondary" className="logout-button">
-      Déconnexion
-    </Button>
-  );
+// Pages imports
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import RegistrationPage from './pages/RegistrationPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
+import TaskListPage from './pages/TaskListPage';
+import TaskStatusBoardPage from './pages/TaskStatusBoardPage';
+import CreateTaskPage from './pages/CreateTaskPage';
+import EditTaskPage from './pages/EditTaskPage';
+import FeaturesPage from './pages/FeaturesPage';
+import PricingPage from './pages/PricingPage';
+import ContactPage from './pages/ContactPage';
+import DashboardPage from './pages/DashboardPage';
+
+// Page temporaire pour les routes non encore implémentées
+const TemporaryPage = ({ pageName }) => (
+  <div style={{ padding: '2rem', textAlign: 'center' }}>
+    <h2>Page {pageName} (À implémenter)</h2>
+    <p>Cette page est en cours de développement.</p>
+  </div>
+);
+
+// Composant de protection de route privée
+const PrivateRoute = ({ element }) => {
+  const isAuthenticated = !!getAuthToken();
+  return isAuthenticated ? element : <Navigate to="/login" replace />;
 };
 
 function App() {
-  const { isAuthenticated, isLoading } = useAuth();
-
   return (
-    <Router>
-      <div className="App">
-        {/* --- nav (inchangée) --- */}
-        <nav className="main-nav">
-         <ul>
-            {isAuthenticated && (
-              <li><Link to="/">Accueil</Link></li>
-            )}
-            {!isLoading && !isAuthenticated && (
-              <>
-                <li><Link to="/register">Inscription</Link></li>
-                <li><Link to="/login">Connexion</Link></li>
-              </>
-            )}
-             {isAuthenticated && (
-              <li>
-                <LogoutNavButton />
-              </li>
-            )}
-          </ul>
-        </nav>
-
-        <main className="content-area">
+    <ToastProvider>
+      <Router>
+        <div className="app">
           <Routes>
-            {/* Routes Publiques */}
-            <Route path="/register" element={<RegistrationPage />} />
+            {/* Routes publiques */}
+            <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegistrationPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            {/* --- AJOUTER LA ROUTE PARAMÉTRÉE --- */}
-            {/* Le nom du paramètre (:resetToken) doit correspondre à ce qu'on utilise avec useParams */}
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/reset-password/:resetToken" element={<ResetPasswordPage />} />
-
-            {/* Routes Protégées */}
-            <Route
-              path="/"
-              element={<ProtectedRoute><HomePage /></ProtectedRoute>}
-            />
-            {/* ... autres routes protégées ... */}
+            <Route path="/fonctionnalites" element={<FeaturesPage />} />
+            <Route path="/features" element={<FeaturesPage />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            
+            {/* Routes protégées pour les tâches */}
+            <Route path="/tasks" element={<PrivateRoute element={<TaskListPage />} />} />
+            <Route path="/tasks/board" element={<PrivateRoute element={<TaskStatusBoardPage />} />} />
+            <Route path="/tasks/create" element={<PrivateRoute element={<CreateTaskPage />} />} />
+            <Route path="/tasks/:taskId/edit" element={<PrivateRoute element={<EditTaskPage />} />} />
+            
+            {/* Routes protégées temporaires */}
+            <Route path="/dashboard" element={<PrivateRoute element={<DashboardPage />} />} />
+            <Route path="/profile" element={<PrivateRoute element={<TemporaryPage pageName="Profil" />} />} />
+            
+            {/* Route 404 */}
+            <Route path="*" element={<TemporaryPage pageName="404 - Page non trouvée" />} />
           </Routes>
-        </main>
-
-        {/* --- footer (inchangé) --- */}
-        <footer className="main-footer">
-          <p>© {new Date().getFullYear()} Task Manager</p>
-        </footer>
-      </div>
-    </Router>
+        </div>
+      </Router>
+    </ToastProvider>
   );
 }
 

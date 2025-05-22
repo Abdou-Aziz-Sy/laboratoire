@@ -3,13 +3,21 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { AuthProvider } from './context/AuthContext'; // <--- AJOUTER CET IMPORT (vérifiez le chemin)
+import { AuthProvider } from './context/AuthContext'; 
 import reportWebVitals from './reportWebVitals';
+
+// En mode développement, chargez l'utilitaire de test des tâches
+if (process.env.NODE_ENV === 'development') {
+  import('./test/taskServiceTest').then(() => {
+    console.log('Testeur de service de tâches chargé pour le développement');
+  }).catch(err => {
+    console.error('Erreur lors du chargement du testeur de tâches:', err);
+  });
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    {/* ENVELOPPER App AVEC AuthProvider */}
     <AuthProvider>
       <App />
     </AuthProvider>

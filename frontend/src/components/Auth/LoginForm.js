@@ -1,22 +1,20 @@
 // --- fichier: frontend/src/components/Auth/LoginForm.js ---
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../api/authService';
-import { useAuth } from '../../context/AuthContext'; // Importe le hook du contexte
-import { Button } from '../common/Button'; // Assurez l'import nommé
-import { InputField } from '../common/InputField'; // Assurez l'import nommé
+import { useAuth } from '../../context/AuthContext';
+import { InputField } from '../common/InputField';
 import styles from './LoginForm.module.css';
 
 function LoginForm() {
   const navigate = useNavigate();
-  const location = useLocation(); // Pour la redirection après connexion
-  const { loginContext } = useAuth(); // Récupère la fonction de mise à jour du contexte
+  const { loginContext } = useAuth();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState(null);
 
-  // Détermine où rediriger après la connexion (page précédente ou accueil)
-  const from = location.state?.from?.pathname || '/';
+  // Remarque: Nous redirigeons systématiquement vers le dashboard après la connexion
+  // indépendamment de la page d'origine (pour respecter les nouvelles spécifications)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,7 +26,7 @@ function LoginForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setApiError(null); // Réinitialise l'erreur à chaque soumission
+    setApiError(null);
 
     // Validation simple côté client
     if (!formData.email || !formData.password) {
@@ -38,46 +36,45 @@ function LoginForm() {
 
     setIsLoading(true);
     try {
-      // Appel API - Attend { token: '...', user: {...} } en retour
+      // Appel API
       const responseData = await login(formData);
 
-      // Met à jour le contexte (qui stockera le token et l'utilisateur)
+      // Met à jour le contexte
       loginContext(responseData.user, responseData.token);
 
       setIsLoading(false);
-      // Redirection vers la page d'origine ou la page d'accueil
-      console.log(`Connexion réussie, redirection vers : ${from}`);
-      navigate(from, { replace: true }); // 'replace' pour ne pas pouvoir revenir à /login
+      // Redirection vers le dashboard après connexion
+      navigate('/dashboard', { replace: true });
 
     } catch (error) {
       setIsLoading(false);
-      // Affiche l'erreur renvoyée par l'API ou une erreur générique
-      setApiError(error.message || "Email ou mot de passe incorrect."); // Message plus spécifique possible
+      setApiError(error.message || "Email ou mot de passe incorrect.");
       console.error("Erreur API Connexion:", error);
     }
   };
 
   return (
-    // Utilise une div wrapper pour appliquer le style de la "carte"
-    <div className={styles.loginFormContainer}>
-      <form onSubmit={handleSubmit} className={styles.loginForm} noValidate>
-        <h2>Connexion</h2>
+    <form onSubmit={handleSubmit} className={styles.loginForm} noValidate>
+      <h2 className={styles.formTitle}>Connexion</h2>
 
-        {apiError && <div className={styles.apiError}>{apiError}</div>}
+      {apiError && <div className={styles.apiError}>{apiError}</div>}
 
+      <div className={styles.inputGroup}>
         <InputField
           label="Adresse Email"
           type="email"
           name="email"
-          id="login-email" // ID unique pour l'accessibilité
+          id="login-email"
           value={formData.email}
           onChange={handleChange}
           placeholder="exemple@domaine.com"
-          // error={null} // Pourrait afficher une erreur de format si validé onBlur
           required
           disabled={isLoading}
+          className={styles.formInput}
         />
+      </div>
 
+      <div className={styles.inputGroup}>
         <InputField
           label="Mot de passe"
           type="password"
@@ -86,27 +83,33 @@ function LoginForm() {
           value={formData.password}
           onChange={handleChange}
           placeholder="********"
-          // error={null}
           required
           disabled={isLoading}
+          className={styles.formInput}
         />
+      </div>
 
-        <Button
-          type="submit"
-          disabled={isLoading}
-          className={styles.submitButton}
-          variant="primary"
-        >
-          {isLoading ? 'Connexion...' : 'Se connecter'}
-        </Button>
+      <button
+        type="submit"
+        disabled={isLoading}
+        className={styles.submitButton}
+      >
+        {isLoading ? (
+          <div className={styles.loadingSpinner}>
+            <span className={styles.spinner}></span>
+            <span>Connexion...</span>
+          </div>
+        ) : (
+          "Se connecter"
+        )}
+      </button>
 
-        {/* Liens vers d'autres pages d'authentification */}
-        <div className={styles.formLinks}>
-              <Link to="/forgot-password">Mot de passe oublié ?</Link>
-              <Link to="/register">Créer un compte</Link>
-        </div>
-      </form>
-    </div>
+      {/* Liens vers d'autres pages d'authentification */}
+      <div className={styles.formLinks}>
+        <Link to="/forgot-password" className={styles.forgotLink}>Mot de passe oublié ?</Link>
+        <Link to="/register" className={styles.registerLink}>Créer un compte</Link>
+      </div>
+    </form>
   );
 }
 

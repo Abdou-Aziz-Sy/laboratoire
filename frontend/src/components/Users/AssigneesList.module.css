@@ -1,0 +1,102 @@
+/* AssigneesList.module.css */
+
+.assigneesList {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  transition: all 0.3s ease;
+}
+
+/* Version compacte pour les espaces ru00e9duits */
+.compact {
+  gap: 2px;
+  margin: 4px 0;
+}
+
+.assigneeItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(30, 30, 30, 0.5);
+  border-radius: 20px;
+  padding: 3px;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.assigneeItem:hover {
+  background: rgba(40, 40, 40, 0.7);
+  transform: translateY(-2px);
+}
+
+/* Style du bouton de suppression */
+.removeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(100, 100, 100, 0.5);
+  color: white;
+  border: none;
+  margin-left: 5px;
+  margin-right: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.removeButton:hover {
+  background: rgba(253, 126, 20, 0.8);
+  opacity: 1;
+}
+
+/* Style du badge indiquant des assignu00e9s additionnels */
+.remainingBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, rgba(253, 126, 20, 0.7), rgba(253, 126, 20, 0.9));
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 0 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.remainingBadge::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmer 2s infinite;
+}
+
+/* Message quand aucun utilisateur n'est assignu00e9 */
+.emptyAssignees {
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+  font-size: 0.9em;
+  padding: 5px 10px;
+  background: rgba(30, 30, 30, 0.3);
+  border-radius: 4px;
+  backdrop-filter: blur(3px);
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}

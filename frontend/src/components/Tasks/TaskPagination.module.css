@@ -1,0 +1,253 @@
+/* frontend/src/components/Tasks/TaskPagination.module.css */
+.paginationContainer {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+/* Animation lors du changement de page */
+.animating {
+  opacity: 0.7;
+  transform: translateY(5px);
+}
+
+.paginationInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.displayedRange {
+  background: rgba(40, 40, 80, 0.4);
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.pageSizeSelector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pageSizeLabel {
+  font-size: 0.85rem;
+}
+
+.pageSizeSelect {
+  background: rgba(50, 50, 100, 0.3);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pageSizeSelect:hover {
+  background: rgba(60, 60, 120, 0.4);
+}
+
+.pageSizeSelect:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(253, 126, 20, 0.3);
+}
+
+.paginationControls {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Conteneur pour les numéros de page */
+.pageNumbersContainer {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pageButton {
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(50, 50, 100, 0.3);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.pageButton:hover:not(:disabled) {
+  background: rgba(60, 60, 120, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pageButton:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.activePage {
+  background: linear-gradient(45deg, rgba(253, 126, 20, 0.6), rgba(253, 126, 20, 0.8));
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+}
+
+.activePage::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  pointer-events: none;
+}
+
+.navButton {
+  font-size: 0.8rem;
+}
+
+.navButtonIcon {
+  font-size: 1.1rem;
+}
+
+.pageButton:disabled {
+  background: rgba(50, 50, 100, 0.1);
+  color: rgba(255, 255, 255, 0.4);
+  cursor: not-allowed;
+}
+
+.ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Style pour le formulaire "Aller à la page" */
+.jumpToPageForm {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.jumpToPageLabel {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.jumpToPageInput {
+  width: 60px;
+  background: rgba(50, 50, 100, 0.3);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.85rem;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.jumpToPageInput:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(253, 126, 20, 0.3);
+  background: rgba(60, 60, 120, 0.4);
+}
+
+.jumpToPageInput::-webkit-inner-spin-button,
+.jumpToPageInput::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.jumpToPageInput[type=number] {
+  -moz-appearance: textfield;
+}
+
+.jumpToPageButton {
+  background: linear-gradient(45deg, rgba(253, 126, 20, 0.6), rgba(253, 126, 20, 0.8));
+  border: none;
+  border-radius: 4px;
+  color: white;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.jumpToPageButton:hover {
+  background: linear-gradient(45deg, rgba(253, 126, 20, 0.8), rgba(253, 126, 20, 1));
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(253, 126, 20, 0.3);
+}
+
+.jumpToPageButton:active {
+  transform: translateY(0);
+}
+
+/* Effet de brillance sur le bouton */
+.jumpToPageButton::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  pointer-events: none;
+  transition: transform 0.6s;
+}
+
+.jumpToPageButton:hover::after {
+  transform: rotate(30deg) translate(50%, 50%);
+}
+
+@media (max-width: 768px) {
+  .paginationInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .pageButton {
+    min-width: 32px;
+    height: 32px;
+  }
+  
+  .jumpToPageForm {
+    flex-wrap: wrap;
+  }
+}

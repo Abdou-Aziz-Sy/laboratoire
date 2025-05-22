@@ -10,6 +10,24 @@ jobs:
   build-backend:
     name: Build & Test Backend
     runs-on: ubuntu-latest
+    
+    # Configuration du service PostgreSQL pour les tests
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_DB: taskhandler_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        # Options de santé pour garantir que PostgreSQL est prêt avant les tests
+        options: >
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -22,12 +40,23 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+      
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
 
       - name: Build backend with Maven
-        run: mvn clean package
+        run: mvn clean package -DskipTests
 
-      - name: Run backend tests
-        run: mvn test
+      - name: Run backend tests with PostgreSQL
+        run: mvn test -Dspring.profiles.active=test
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/taskhandler_test
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: postgres
 
   build-frontend:
     name: Build & Test Frontend

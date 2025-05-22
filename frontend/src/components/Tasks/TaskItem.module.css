@@ -1,0 +1,324 @@
+/* --- fichier: frontend/src/components/Tasks/TaskItem.module.css --- */
+
+.taskItem {
+  background: linear-gradient(135deg, rgba(30, 30, 35, 0.8) 0%, rgba(15, 15, 20, 0.85) 100%);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: var(--white, #ffffff);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.taskItem:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Effet de brillance au hover */
+.taskItem::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.05), 
+    transparent);
+  transition: left 0.8s ease;
+}
+
+.taskItem:hover::after {
+  left: 100%;
+}
+
+/* En-tête de la tâche */
+.taskHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.taskTitle {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--white, #ffffff);
+  line-height: 1.3;
+  flex: 1;
+}
+
+/* Badge de priorité */
+.priorityBadge {
+  padding: 0.3rem 0.75rem;
+  border-radius: 25px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.highPriority {
+  background-color: rgba(255, 76, 76, 0.2);
+  color: rgba(255, 76, 76, 1);
+  border: 1px solid rgba(255, 76, 76, 0.3);
+}
+
+.mediumPriority {
+  background-color: rgba(255, 170, 0, 0.2);
+  color: rgba(255, 170, 0, 1);
+  border: 1px solid rgba(255, 170, 0, 0.3);
+}
+
+.lowPriority {
+  background-color: rgba(76, 175, 80, 0.2);
+  color: rgba(76, 175, 80, 1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+/* Description de la tâche */
+.taskDescription {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  margin: 0.5rem 0;
+}
+
+.noDescription {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Méta-informations */
+.taskMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.taskDate {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.taskStatus {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Classes pour les différents statuts */
+.completed {
+  border-left: 4px solid rgba(76, 175, 80, 0.8);
+}
+
+.inProgress {
+  border-left: 4px solid rgba(33, 150, 243, 0.8);
+}
+
+.pending {
+  border-left: 4px solid rgba(255, 170, 0, 0.8);
+}
+
+/* Section des assignés */
+.assigneesSection {
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  background: rgba(20, 20, 25, 0.5);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.assigneesSection:hover {
+  background: rgba(30, 30, 35, 0.7);
+}
+
+.assigneesHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.assigneesHeader h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.assignButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(253, 126, 20, 0.7), rgba(253, 126, 20, 0.9));
+  color: white;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.assignButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(253, 126, 20, 0.3);
+}
+
+.assignButton:active {
+  transform: translateY(0);
+}
+
+.assignButton::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: -100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+/* Actions sur la tâche */
+.taskActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.editButton,
+.deleteButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.editButton {
+  background-color: rgba(33, 150, 243, 0.1);
+  color: rgba(33, 150, 243, 0.9);
+  border: 1px solid rgba(33, 150, 243, 0.2);
+  text-decoration: none;
+}
+
+.editButton:hover {
+  background-color: rgba(33, 150, 243, 0.2);
+  transform: translateY(-2px);
+}
+
+.deleteButton {
+  background-color: rgba(255, 76, 76, 0.1);
+  color: rgba(255, 76, 76, 0.9);
+  border: 1px solid rgba(255, 76, 76, 0.2);
+  border: none;
+}
+
+.deleteButton:hover {
+  background-color: rgba(255, 76, 76, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Effet de brillance pour les boutons */
+.editButton::before,
+.deleteButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0) 0%, 
+    rgba(255, 255, 255, 0.2) 50%, 
+    rgba(255, 255, 255, 0) 100%);
+  transform: translateX(-100%);
+}
+
+.editButton:hover::before,
+.deleteButton:hover::before {
+  animation: buttonShine 1.5s infinite;
+}
+
+@keyframes buttonShine {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Animation de suppression */
+.removing {
+  animation: removeTask 0.3s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes removeTask {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateX(-10px) scale(0.98);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-20px) scale(0.96);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .taskHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .priorityBadge {
+    align-self: flex-start;
+  }
+  
+  .taskMeta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .taskActions {
+    flex-direction: column;
+  }
+  
+  .editButton,
+  .deleteButton {
+    justify-content: center;
+  }
+}
