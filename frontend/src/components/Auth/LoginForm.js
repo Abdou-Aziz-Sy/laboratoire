@@ -1,6 +1,6 @@
 // --- fichier: frontend/src/components/Auth/LoginForm.js ---
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../api/authService';
 import { useAuth } from '../../context/AuthContext';
 import { InputField } from '../common/InputField';
@@ -8,14 +8,13 @@ import styles from './LoginForm.module.css';
 
 function LoginForm() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { loginContext } = useAuth();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState(null);
 
-  // Détermine où rediriger après la connexion
-  const from = location.state?.from?.pathname || '/';
+  // Remarque: Nous redirigeons systématiquement vers le dashboard après la connexion
+  // indépendamment de la page d'origine (pour respecter les nouvelles spécifications)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,7 +43,8 @@ function LoginForm() {
       loginContext(responseData.user, responseData.token);
 
       setIsLoading(false);
-      navigate(from, { replace: true });
+      // Redirection vers le dashboard après connexion
+      navigate('/dashboard', { replace: true });
 
     } catch (error) {
       setIsLoading(false);
