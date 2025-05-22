@@ -1,0 +1,189 @@
+/* --- fichier: frontend/src/components/Dashboard/DashboardLayout.module.css --- */
+
+.dashboardContainer {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  color: var(--white, #ffffff);
+}
+
+/* Panneau principal avec effet de verre */
+.glassPanel {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(10px);
+  background-color: rgba(10, 15, 30, 0.6);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Section principale contenant sidebar et content */
+.mainSection {
+  display: flex;
+  flex: 1;
+  position: relative;
+  height: calc(100vh - 70px); /* Hauteur du header */
+  overflow: hidden;
+}
+
+/* Effet de fond avec dégradé */
+.backgroundEffect {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.gradientOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #121826 0%, #1a1f30 50%, #252a3f 100%);
+  animation: gradientAnimation 15s ease infinite;
+}
+
+/* Effet de grille */
+.gridPattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.3;
+}
+
+/* Particules décoratives flottantes */
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.particle {
+  position: absolute;
+  background: linear-gradient(135deg, rgba(253, 126, 20, 0.2) 0%, rgba(253, 126, 20, 0.5) 100%);
+  border-radius: 50%;
+  opacity: 0;
+  filter: blur(2px);
+  animation: particleFloat 20s infinite linear;
+}
+
+.particle1 {
+  width: 60px;
+  height: 60px;
+  top: 10%;
+  left: 10%;
+  animation-duration: 25s;
+  animation-delay: 0s;
+}
+
+.particle2 {
+  width: 40px;
+  height: 40px;
+  top: 40%;
+  left: 25%;
+  animation-duration: 30s;
+  animation-delay: 2s;
+}
+
+.particle3 {
+  width: 80px;
+  height: 80px;
+  top: 70%;
+  left: 15%;
+  animation-duration: 22s;
+  animation-delay: 1s;
+}
+
+.particle4 {
+  width: 50px;
+  height: 50px;
+  top: 15%;
+  left: 65%;
+  animation-duration: 28s;
+  animation-delay: 3s;
+}
+
+.particle5 {
+  width: 35px;
+  height: 35px;
+  top: 60%;
+  left: 80%;
+  animation-duration: 20s;
+  animation-delay: 0.5s;
+}
+
+.particle6 {
+  width: 70px;
+  height: 70px;
+  top: 35%;
+  left: 85%;
+  animation-duration: 35s;
+  animation-delay: 4s;
+}
+
+.particle7 {
+  width: 45px;
+  height: 45px;
+  top: 80%;
+  left: 40%;
+  animation-duration: 23s;
+  animation-delay: 2s;
+}
+
+.particle8 {
+  width: 55px;
+  height: 55px;
+  top: 20%;
+  left: 35%;
+  animation-duration: 26s;
+  animation-delay: 1.5s;
+}
+
+/* Animations */
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-300px) translateX(200px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Media queries pour la responsivité */
+@media (max-width: 768px) {
+  .mainSection {
+    flex-direction: column;
+    height: calc(100vh - 60px); /* Hauteur réduite du header sur mobile */
+  }
+}

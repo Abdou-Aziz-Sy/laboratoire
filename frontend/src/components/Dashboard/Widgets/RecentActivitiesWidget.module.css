@@ -1,0 +1,392 @@
+/* --- fichier: frontend/src/components/Dashboard/Widgets/RecentActivitiesWidget.module.css --- */
+.widget {
+  background: linear-gradient(145deg, rgba(30, 30, 35, 0.7), rgba(20, 20, 25, 0.85));
+  border-radius: 14px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.widget:hover {
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.25);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.title::after {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: rgba(253, 126, 20, 0.8);
+  margin-left: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.refreshButton {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.refreshButton:hover {
+  background: rgba(253, 126, 20, 0.3);
+}
+
+.refreshButton.refreshing {
+  background: rgba(253, 126, 20, 0.2);
+  cursor: default;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(253, 126, 20, 0.4) rgba(255, 255, 255, 0.05);
+  padding: 0.5rem;
+}
+
+/* Scrollbar personnalisée pour Chrome/Safari */
+.content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: rgba(253, 126, 20, 0.4);
+  border-radius: 10px;
+}
+
+.activityList {
+  list-style: none;
+  padding: 0.5rem;
+  margin: 0;
+}
+
+.activityItem {
+  position: relative;
+  padding: 0.75rem 0;
+}
+
+.activityTime {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.3rem;
+  padding-left: 2.7rem;
+}
+
+.activityContent {
+  display: flex;
+}
+
+.activityIconContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.activityIcon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  z-index: 2;
+}
+
+.timelineLine {
+  position: absolute;
+  top: 32px;
+  left: 50%;
+  width: 2px;
+  height: calc(100% - 20px);
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.activityItem:last-child .timelineLine {
+  display: none;
+}
+
+.activityDetails {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  padding: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.activityDetails:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateX(2px);
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.userAvatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  object-fit: cover;
+}
+
+.userInitials {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.userName {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: white;
+}
+
+.activityDescription {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.activityText {
+  margin-right: 0.3rem;
+}
+
+.activityTarget {
+  font-weight: 500;
+  color: white;
+  position: relative;
+  display: inline-block;
+}
+
+.activityTarget::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: rgba(253, 126, 20, 0.5);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.activityDetails:hover .activityTarget::after {
+  transform: scaleX(1);
+}
+
+/* Styles spécifiques aux types d'activités */
+.comment .activityIcon {
+  background: rgba(59, 130, 246, 0.2);
+  color: rgb(59, 130, 246);
+}
+
+.completion .activityIcon {
+  background: rgba(52, 211, 153, 0.2);
+  color: rgb(52, 211, 153);
+}
+
+.update .activityIcon {
+  background: rgba(253, 126, 20, 0.2);
+  color: rgba(253, 126, 20, 0.9);
+}
+
+.creation .activityIcon {
+  background: rgba(16, 185, 129, 0.2);
+  color: rgb(16, 185, 129);
+}
+
+.deletion .activityIcon {
+  background: rgba(239, 68, 68, 0.2);
+  color: rgb(239, 68, 68);
+}
+
+.link .activityIcon {
+  background: rgba(139, 92, 246, 0.2);
+  color: rgb(139, 92, 246);
+}
+
+/* État vide */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  height: 100%;
+}
+
+.emptyIcon {
+  margin-bottom: 1rem;
+  opacity: 0.4;
+}
+
+.emptyState p {
+  font-size: 0.95rem;
+  margin: 0 0 0.5rem 0;
+  font-weight: 500;
+}
+
+.emptyState span {
+  font-size: 0.8rem;
+  max-width: 200px;
+}
+
+/* État de chargement */
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 200px;
+}
+
+.spinner {
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top: 3px solid rgba(253, 126, 20, 0.8);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.loadingState p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.footer {
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.viewAllButton {
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgba(253, 126, 20, 0.4), rgba(253, 126, 20, 0.6));
+  color: white;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.viewAllButton:hover {
+  background: linear-gradient(90deg, rgba(253, 126, 20, 0.5), rgba(253, 126, 20, 0.7));
+}
+
+.viewAllButton::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: rotate(30deg);
+  transition: all 0.6s ease;
+  opacity: 0;
+}
+
+.viewAllButton:hover::after {
+  transform: rotate(30deg) translate(50%, 50%);
+  opacity: 1;
+}
+
+/* Réactivité */
+@media (max-width: 768px) {
+  .header, .footer {
+    padding: 1rem;
+  }
+  
+  .activityList {
+    padding: 0.3rem;
+  }
+  
+  .activityTime {
+    padding-left: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .activityIcon {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .activityTime {
+    padding-left: 2.3rem;
+  }
+}
