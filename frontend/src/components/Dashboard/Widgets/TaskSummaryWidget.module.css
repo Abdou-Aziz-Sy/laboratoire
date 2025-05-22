@@ -1,0 +1,482 @@
+/* --- fichier: frontend/src/components/Dashboard/Widgets/TaskSummaryWidget.module.css --- */
+.widget {
+  background: linear-gradient(145deg, rgba(30, 30, 35, 0.7), rgba(20, 20, 25, 0.85));
+  border-radius: 14px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.widget:hover {
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.25);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.title::after {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: rgba(253, 126, 20, 0.8);
+  margin-left: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.expandButton {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.expandButton:hover {
+  background: rgba(253, 126, 20, 0.6);
+}
+
+.statsContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+}
+
+.stat:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.pending {
+  border-left: 3px solid rgb(59, 130, 246);
+}
+
+.completed {
+  border-left: 3px solid rgb(52, 211, 153);
+}
+
+.overdue {
+  border-left: 3px solid rgb(239, 68, 68);
+}
+
+.efficiency {
+  border-left: 3px solid rgba(253, 126, 20, 0.8);
+}
+
+.statIcon {
+  font-size: 1.2rem;
+  margin-right: 0.8rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.pending .statIcon {
+  color: rgb(59, 130, 246);
+}
+
+.completed .statIcon {
+  color: rgb(52, 211, 153);
+}
+
+.overdue .statIcon {
+  color: rgb(239, 68, 68);
+}
+
+.efficiency .statIcon {
+  color: rgba(253, 126, 20, 0.9);
+}
+
+.statContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.statValue {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.filterContainer {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.filterLabel {
+  display: flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  margin-right: 1rem;
+}
+
+.filterLabel svg {
+  margin-right: 0.3rem;
+}
+
+.filterOptions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filterOption {
+  padding: 0.35rem 0.8rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  border: none;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filterOption:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.filterOption.active {
+  background: rgba(253, 126, 20, 0.2);
+  color: white;
+  font-weight: 500;
+}
+
+.tasksContainer {
+  height: 300px;
+  overflow-y: auto;
+  padding: 0 0.5rem;
+  transition: height 0.3s ease;
+  /* Pour la scrollbar personnalisée */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(253, 126, 20, 0.4) rgba(255, 255, 255, 0.05);
+}
+
+/* Scrollbar personnalisée pour Chrome/Safari */
+.tasksContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tasksContainer::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.tasksContainer::-webkit-scrollbar-thumb {
+  background: rgba(253, 126, 20, 0.4);
+  border-radius: 10px;
+}
+
+.tasksContainer.expanded {
+  height: auto;
+  max-height: 600px;
+}
+
+.tasksList {
+  list-style: none;
+  padding: 0.5rem 1rem;
+  margin: 0;
+}
+
+.taskItem {
+  padding: 1rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  margin-bottom: 0.8rem;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.taskItem:hover {
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateX(2px);
+}
+
+.taskItem.pending {
+  border-left-color: rgb(59, 130, 246);
+}
+
+.taskItem.completed {
+  border-left-color: rgb(52, 211, 153);
+}
+
+.taskItem.overdue {
+  border-left-color: rgb(239, 68, 68);
+}
+
+.taskItem.priorityHigh {
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.1);
+}
+
+.taskItem.priorityMedium {
+  box-shadow: 0 2px 8px rgba(253, 126, 20, 0.1);
+}
+
+.taskItem.priorityLow {
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+}
+
+.taskHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.8rem;
+}
+
+.taskTitle {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: white;
+  line-height: 1.4;
+  flex: 1;
+  padding-right: 0.5rem;
+}
+
+.priorityBadge {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.priorityBadge.high {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: rgb(239, 68, 68);
+}
+
+.priorityBadge.medium {
+  background-color: rgba(253, 126, 20, 0.15);
+  color: rgba(253, 126, 20, 0.9);
+}
+
+.priorityBadge.low {
+  background-color: rgba(59, 130, 246, 0.15);
+  color: rgb(59, 130, 246);
+}
+
+.taskMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.taskDueDate, .taskStatus {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.progressContainer {
+  display: flex;
+  align-items: center;
+}
+
+.progressTrack {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-right: 0.8rem;
+}
+
+.progressBar {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(253, 126, 20, 0.4), rgba(253, 126, 20, 0.8));
+  border-radius: 3px;
+}
+
+.progressValue {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.footer {
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.viewAllButton {
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgba(253, 126, 20, 0.4), rgba(253, 126, 20, 0.6));
+  color: white;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.viewAllButton:hover {
+  background: linear-gradient(90deg, rgba(253, 126, 20, 0.5), rgba(253, 126, 20, 0.7));
+}
+
+.viewAllButton::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: rotate(30deg);
+  transition: all 0.6s ease;
+  opacity: 0;
+}
+
+.viewAllButton:hover::after {
+  transform: rotate(30deg) translate(50%, 50%);
+  opacity: 1;
+}
+
+/* État vide */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+}
+
+.emptyIcon {
+  margin-bottom: 1rem;
+  opacity: 0.4;
+}
+
+.emptyState p {
+  font-size: 0.9rem;
+  max-width: 200px;
+}
+
+/* État de chargement */
+.loadingState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+}
+
+.loadingRipple {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+
+.loadingRipple div {
+  position: absolute;
+  border: 4px solid rgba(253, 126, 20, 0.6);
+  opacity: 1;
+  border-radius: 50%;
+  animation: loadingRipple 1.5s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+.loadingRipple div:nth-child(2) {
+  animation-delay: -0.5s;
+}
+
+@keyframes loadingRipple {
+  0% {
+    top: 28px;
+    left: 28px;
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    top: -1px;
+    left: -1px;
+    width: 58px;
+    height: 58px;
+    opacity: 0;
+  }
+}
+
+/* Réactivité */
+@media (max-width: 1024px) {
+  .statsContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .header, .filterContainer, .footer {
+    padding: 1rem;
+  }
+  
+  .tasksList {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .statsContainer {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .filterContainer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .filterLabel {
+    margin-bottom: 0.5rem;
+  }
+}
