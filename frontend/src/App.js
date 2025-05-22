@@ -18,6 +18,7 @@ import EditTaskPage from './pages/EditTaskPage';
 import FeaturesPage from './pages/FeaturesPage';
 import PricingPage from './pages/PricingPage';
 import ContactPage from './pages/ContactPage';
+import DashboardPage from './pages/DashboardPage';
 
 // Page temporaire pour les routes non encore implémentées
 const TemporaryPage = ({ pageName }) => (
@@ -58,7 +59,7 @@ function App() {
             <Route path="/tasks/:taskId/edit" element={<PrivateRoute element={<EditTaskPage />} />} />
             
             {/* Routes protégées temporaires */}
-            <Route path="/dashboard" element={<PrivateRoute element={<TemporaryPage pageName="Tableau de bord" />} />} />
+            <Route path="/dashboard" element={<PrivateRoute element={<DashboardPage />} />} />
             <Route path="/profile" element={<PrivateRoute element={<TemporaryPage pageName="Profil" />} />} />
             
             {/* Route 404 */}
