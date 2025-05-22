@@ -1,0 +1,186 @@
+/* --- fichier: frontend/src/components/Dashboard/Widgets/StatCard.module.css --- */
+.statCard {
+  position: relative;
+  display: flex;
+  padding: 1.5rem;
+  background: linear-gradient(145deg, rgba(30, 30, 35, 0.7), rgba(20, 20, 25, 0.85));
+  border-radius: 12px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+
+.statCard:hover .highlight {
+  opacity: 0.12;
+  transform: scale(1.05);
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(253, 126, 20, 0.2);
+  color: rgba(253, 126, 20, 0.9);
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.contentContainer {
+  flex: 1;
+}
+
+.title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 0.5rem 0;
+}
+
+.valueContainer {
+  display: flex;
+  align-items: baseline;
+}
+
+.value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  margin-right: 0.5rem;
+}
+
+.change {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.positive {
+  background-color: rgba(52, 211, 153, 0.15);
+  color: rgb(52, 211, 153);
+}
+
+.negative {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: rgb(239, 68, 68);
+}
+
+.neutral {
+  background-color: rgba(107, 114, 128, 0.15);
+  color: rgb(209, 213, 219);
+}
+
+.highlight {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(253, 126, 20, 0.1), transparent);
+  transition: all 0.4s ease;
+  opacity: 0.05;
+  border-radius: 50%;
+  transform: translate(30%, -30%) scale(0.9);
+}
+
+/* Couleurs variantes */
+.colorDefault .iconContainer {
+  background: rgba(253, 126, 20, 0.2);
+  color: rgba(253, 126, 20, 0.9);
+}
+
+.colorBlue .iconContainer {
+  background: rgba(59, 130, 246, 0.2);
+  color: rgba(59, 130, 246, 0.9);
+}
+
+.colorGreen .iconContainer {
+  background: rgba(52, 211, 153, 0.2);
+  color: rgba(52, 211, 153, 0.9);
+}
+
+.colorPurple .iconContainer {
+  background: rgba(139, 92, 246, 0.2);
+  color: rgba(139, 92, 246, 0.9);
+}
+
+/* État de chargement */
+.loadingState {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+}
+
+.loadingPulse {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(253, 126, 20, 0.2);
+  position: relative;
+}
+
+.loadingPulse:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  border: 3px solid rgba(253, 126, 20, 0.4);
+  animation: pulse 1.5s linear infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Media queries pour la réactivité */
+@media (max-width: 768px) {
+  .statCard {
+    padding: 1.2rem;
+  }
+  
+  .iconContainer {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .value {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .statCard {
+    padding: 1rem;
+    flex-direction: column;
+  }
+  
+  .iconContainer {
+    margin-right: 0;
+    margin-bottom: 0.8rem;
+  }
+}
