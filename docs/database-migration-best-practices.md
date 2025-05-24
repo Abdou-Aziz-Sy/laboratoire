@@ -3,7 +3,7 @@
 ## Conventions de nommage Flyway
 
 - Les fichiers de migration **doivent** suivre le format : `V{version}__{description}.sql`
-  - Exemple correct : `V1__Create_User_Table.sql`, `V2__Add_Reset_Password_Fields.sql`
+  - Exemple correct : `V1__Create_User_Table.sql`, `V2__Add__Reset_Password_Fields.sql`
   - Notez le **double underscore** entre le numéro de version et la description
   - Les versions doivent être séquentielles et ne jamais être modifiées une fois déployées
 

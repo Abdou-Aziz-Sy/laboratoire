@@ -1,6 +1,7 @@
 package com.example.taskmanager.service;
 
 import com.example.taskmanager.dto.CreateTaskDTO;
+import com.example.taskmanager.dto.UpdateTaskDTO;
 import com.example.taskmanager.exception.AccessDeniedException;
 import com.example.taskmanager.exception.ResourceNotFoundException;
 import com.example.taskmanager.model.Task;
@@ -93,11 +94,40 @@ public class TaskService {
         return task;
     }
 
-      private User getCurrentAuthenticatedUser() {
+      private User getCurrentAuthenticatedUser()
+      {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         return userRepository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+      }
+
+    @Transactional
+    public Task updateTask(Long id, UpdateTaskDTO updateTaskDTO) {
+
+        Task task = getTaskById(id);
+
+
+        if (updateTaskDTO.getTitle() != null) {
+            task.setTitle(updateTaskDTO.getTitle());
+        }
+
+        if (updateTaskDTO.getDescription() != null) {
+            task.setDescription(updateTaskDTO.getDescription());
+        }
+
+        if (updateTaskDTO.getPriority() != null) {
+            task.setPriority(updateTaskDTO.getPriority());
+        }
+
+        if (updateTaskDTO.getDueDate() != null) {
+            task.setDueDate(updateTaskDTO.getDueDate());
+        }
+
+        task.setCompleted(updateTaskDTO.isCompleted());
+
+
+        return taskRepository.save(task);
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.taskmanager.controller;
 
 import com.example.taskmanager.dto.CreateTaskDTO;
+import com.example.taskmanager.dto.UpdateTaskDTO;
 import com.example.taskmanager.model.Task;
 import com.example.taskmanager.model.TaskPriority;
 import com.example.taskmanager.service.TaskService;
@@ -71,5 +72,23 @@ public class TaskController {
     public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
         Task task = taskService.getTaskById(id);
         return ResponseEntity.ok(task);
+    }
+
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Mettre à jour une tâche existante",
+            description = "Met à jour une tâche en fonction de l'ID fourni. Seul le propriétaire de la tâche peut la modifier.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Tâche mise à jour avec succès"),
+            @ApiResponse(responseCode = "400", description = "Données de requête invalides"),
+            @ApiResponse(responseCode = "403", description = "Accès refusé - vous n'êtes pas le propriétaire de cette tâche"),
+            @ApiResponse(responseCode = "404", description = "Tâche non trouvée")
+    })
+    public ResponseEntity<Task> updateTask(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateTaskDTO updateTaskDTO) {
+
+        Task updatedTask = taskService.updateTask(id, updateTaskDTO);
+        return ResponseEntity.ok(updatedTask);
     }
 }
