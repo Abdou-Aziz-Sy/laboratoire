@@ -2,6 +2,7 @@ package com.example.taskmanager.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User {
 
     @Id
@@ -36,6 +38,7 @@ public class User {
     private LocalDateTime updatedAt;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Builder.Default
 	private List<Task> tasks = new ArrayList<>();
 
 
@@ -147,14 +150,25 @@ public void setTasks(List<Task> tasks) {
 
 // Méthodes utilitaires pour gérer la relation bidirectionnelle
 public void addTask(Task task) {
-    tasks.add(task);
-    task.setUser(this);
+    if (!tasks.contains(task)) {
+        tasks.add(task);
+        // Éviter les appels récursifs infinis
+        if (task.getUser() != this) {
+            task.setUser(this);
+        }
+    }
 }
 
 public void removeTask(Task task) {
-    tasks.remove(task);
-    task.setUser(null);
+    if (tasks.contains(task)) {
+        tasks.remove(task);
+        // Éviter les appels récursifs infinis
+        if (task.getUser() == this) {
+            task.setUser(null);
+        }
+    }
 }
 
 
 }
+

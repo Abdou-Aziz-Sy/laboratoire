@@ -2,10 +2,15 @@ package com.example.taskmanager.controller;
 
 import com.example.taskmanager.dto.CreateTaskDTO;
 import com.example.taskmanager.dto.UpdateTaskDTO;
+import com.example.taskmanager.dto.UpdateTaskStatusDTO;
+import com.example.taskmanager.dto.TaskStatusHistoryDTO;
 import com.example.taskmanager.model.Task;
 import com.example.taskmanager.model.TaskPriority;
+import com.example.taskmanager.model.TaskStatus;
+import com.example.taskmanager.model.TaskStatusHistory;
 import com.example.taskmanager.service.TaskService;
 
+import com.example.taskmanager.service.TaskStatusService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,10 +29,12 @@ import java.util.List;
 public class TaskController {
 
     private final TaskService taskService;
+    private final TaskStatusService taskStatusService;
 
     @Autowired
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService, TaskStatusService taskStatusService) {
         this.taskService = taskService;
+        this.taskStatusService = taskStatusService;
     }
     @Operation(summary = "Create a new task", description = "Creates a new task for a specific user")
     @ApiResponses(value = {
@@ -90,5 +97,48 @@ public class TaskController {
 
         Task updatedTask = taskService.updateTask(id, updateTaskDTO);
         return ResponseEntity.ok(updatedTask);
+    }
+
+    @Operation(summary = "Mettre à jour le statut d'une tâche",
+            description = "Met à jour le statut d'une tâche avec validation des transitions autorisées")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Statut mis à jour avec succès"),
+            @ApiResponse(responseCode = "400", description = "Transition de statut invalide ou données invalides"),
+            @ApiResponse(responseCode = "403", description = "Accès refusé - vous n'êtes pas le propriétaire de cette tâche"),
+            @ApiResponse(responseCode = "404", description = "Tâche non trouvée")
+    })
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Task> updateTaskStatus(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateTaskStatusDTO statusDTO) {
+
+        Task updatedTask = taskStatusService.updateTaskStatus(id, statusDTO);
+        return ResponseEntity.ok(updatedTask);
+    }
+
+    @Operation(summary = "Récupérer l'historique des changements de statut",
+            description = "Récupère l'historique complet des changements de statut pour une tâche")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Historique récupéré avec succès"),
+            @ApiResponse(responseCode = "403", description = "Accès refusé - vous n'êtes pas le propriétaire de cette tâche"),
+            @ApiResponse(responseCode = "404", description = "Tâche non trouvée")
+    })
+    @GetMapping("/{id}/status-history")
+    public ResponseEntity<List<TaskStatusHistoryDTO>> getTaskStatusHistory(@PathVariable Long id) {
+        List<TaskStatusHistoryDTO> history = taskStatusService.getTaskStatusHistory(id);
+        return ResponseEntity.ok(history);
+    }
+
+    @Operation(summary = "Récupérer les transitions de statut disponibles",
+            description = "Récupère la liste des statuts vers lesquels la tâche peut transitionner")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Transitions disponibles récupérées avec succès"),
+            @ApiResponse(responseCode = "403", description = "Accès refusé - vous n'êtes pas le propriétaire de cette tâche"),
+            @ApiResponse(responseCode = "404", description = "Tâche non trouvée")
+    })
+    @GetMapping("/{id}/available-transitions")
+    public ResponseEntity<List<TaskStatus>> getAvailableTransitions(@PathVariable Long id) {
+        List<TaskStatus> availableTransitions = taskStatusService.getAvailableTransitions(id);
+        return ResponseEntity.ok(availableTransitions);
     }
 }

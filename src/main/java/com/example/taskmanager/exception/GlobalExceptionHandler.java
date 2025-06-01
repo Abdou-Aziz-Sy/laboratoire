@@ -104,4 +104,14 @@ public class GlobalExceptionHandler {
             this.errors = errors;
         }
     }
+
+    @ExceptionHandler(InvalidStatusTransitionException.class)
+    public ResponseEntity<?> handleInvalidStatusTransitionException(InvalidStatusTransitionException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 }
